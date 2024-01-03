@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
 	id("com.android.application")
 	kotlin("android")
@@ -17,7 +19,22 @@ android {
 		versionName = "1.0"
 
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+		rootProject.file("pexels.properties").apply file@{
+			if (!exists()) return@file
+			val properties = Properties()
+			inputStream().use { stream ->
+				properties.load(stream)
+				// API_KEY
+				val apiKey = properties.getProperty("API_KEY")
+				buildConfigField(type = "String", name = "API_KEY", value = "\"$apiKey\"")
+				// BASE_URL
+				val baseUrl = properties.getProperty("BASE_URL")
+				buildConfigField(type = "String", name = "BASE_URL", value = "\"$baseUrl\"")
+			}
+		}
 	}
+
 
 	buildTypes {
 		release {
@@ -37,6 +54,7 @@ android {
 	}
 	buildFeatures {
 		viewBinding = true
+		buildConfig = true
 	}
 }
 
@@ -52,8 +70,12 @@ dependencies {
 	implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
 	//retrofit
 	implementation("com.squareup.retrofit2:retrofit:2.9.0")
+	implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
 	//moshi
-	implementation("com.squareup.moshi:moshi:1.14.0")
+	implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
+	ksp("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
+	//paging
+	implementation("androidx.paging:paging-runtime:3.2.1")
 	//coil
 	implementation("io.coil-kt:coil:2.5.0")
 	// dependency injection
