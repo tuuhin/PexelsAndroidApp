@@ -8,7 +8,7 @@ data class PaginatedCollectionWrapperDto(
 	@Json(name = "page") val page: Int,
 	@Json(name = "per_page") val perPage: Int,
 	@Json(name = "total_results") val totalResults: Int,
-	@Json(name = "next_url") val next: String,
-	@Json(name = "previous_url") val previous: String,
+	@Json(name = "next_url") val next: String? = null,
+	@Json(name = "previous_url") val previous: String? = null,
 	@Json(name = "collections") val collections: List<PhotoCollectionDto>
 )
