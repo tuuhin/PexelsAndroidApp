@@ -5,6 +5,7 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class PhotoResourceDto(
+	@Json(name = "type") val type: String? = "Photo",
 	@Json(name = "id") val id: Int,
 	@Json(name = "width") val width: Int,
 	@Json(name = "height") val height: Int,

@@ -6,11 +6,11 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class PhotoCollectionDto(
-    @Json(name = "description") val description: String,
-    @Json(name = "id") val id: String,
-    @Json(name = "media_count") val mediaCount: Int,
-    @Json(name = "photos_count") val photosCount: Int,
-    @Json(name = "private") val isPrivate: Boolean,
-    @Json(name = "title") val title: String,
-    @Json(name = "videos_count") val videosCount: Int
+	@Json(name = "id") val id: String,
+	@Json(name = "title") val title: String,
+	@Json(name = "description") val description: String? = null,
+	@Json(name = "private") val isPrivate: Boolean,
+	@Json(name = "media_count") val mediaCount: Int,
+	@Json(name = "photos_count") val photosCount: Int,
+	@Json(name = "videos_count") val videosCount: Int
 )
