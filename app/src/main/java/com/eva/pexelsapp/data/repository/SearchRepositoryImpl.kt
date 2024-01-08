@@ -10,18 +10,14 @@ import com.eva.pexelsapp.data.remote.PexelsApi
 import com.eva.pexelsapp.data.remote.dto.PhotoResourceDto
 import com.eva.pexelsapp.domain.models.PhotoResource
 import com.eva.pexelsapp.domain.repository.SearchRepository
-import com.eva.pexelsapp.utils.AppConstants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class SearchRepositoryImpl(
-	private val api: PexelsApi
+class SearchRepositoryImpl @Inject constructor(
+	private val api: PexelsApi,
+	private val pagerConfig: PagingConfig,
 ) : SearchRepository {
-
-	private val pagerConfig = PagingConfig(
-		pageSize = AppConstants.PAGER_PAGE_SIZE,
-		enablePlaceholders = false
-	)
 
 	override fun searchPhotoAsFlow(query: String): Flow<PagingData<PhotoResource>> {
 		val searchPager = Pager(

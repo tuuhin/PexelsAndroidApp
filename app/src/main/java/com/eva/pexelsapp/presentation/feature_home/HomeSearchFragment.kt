@@ -13,13 +13,14 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.eva.pexelsapp.databinding.HomeSearchFragmentBinding
+import com.eva.pexelsapp.presentation.feature_home.adapters.SearchResultsAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeSearchFragment : Fragment() {
 
-	private val viewModel by activityViewModels<SearchPhotoViewModel>()
+	private val viewModel by activityViewModels<HomeViewModel>()
 
 	private var _binding: HomeSearchFragmentBinding? = null
 
@@ -35,7 +36,7 @@ class HomeSearchFragment : Fragment() {
 
 		val context = requireContext()
 
-		val adapter = PhotoResultsViewAdapter(context)
+		val adapter = SearchResultsAdapter(context)
 
 		binding.searchResults.apply {
 			this.adapter = adapter

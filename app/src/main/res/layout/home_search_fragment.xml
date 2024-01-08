@@ -9,7 +9,7 @@
     android:name="com.eva.pexelsapp.presentation.feature_home.HomeFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="@dimen/m3_searchbar_height"
+    android:layout_marginTop="?attr/actionBarSize"
     app:layout_behavior="@string/searchbar_scrolling_view_behavior"
     tools:ignore="PrivateResource"
     tools:layout="@layout/home_fragment" />

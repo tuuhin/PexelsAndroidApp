@@ -1,4 +1,4 @@
-package com.eva.pexelsapp.presentation.feature_home
+package com.eva.pexelsapp.presentation.feature_home.adapters
 
 import android.content.Context
 import android.graphics.Color
@@ -12,28 +12,27 @@ import com.eva.pexelsapp.databinding.PhotoResultLayoutBinding
 import com.eva.pexelsapp.domain.models.PhotoResource
 import com.eva.pexelsapp.presentation.util.PhotoResourceComparator
 
-class PhotoResultsViewAdapter(
+class SearchResultsAdapter(
 	private val context: Context
-) : PagingDataAdapter<PhotoResource, PhotoResultsViewAdapter.SearchViewHolder>(
-	PhotoResourceComparator
-) {
+) : PagingDataAdapter<PhotoResource, SearchResultsAdapter.PhotoViewHolder>(PhotoResourceComparator) {
 
-	inner class SearchViewHolder(binding: PhotoResultLayoutBinding) :
+	inner class PhotoViewHolder(binding: PhotoResultLayoutBinding) :
 		RecyclerView.ViewHolder(binding.root) {
 		var photoTakenBy = binding.photographerName
 		var altText = binding.altText
 		var imageView = binding.image
 	}
 
-	override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
+	override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
 		val item = getItem(position)
 		item?.let {
 			holder.photoTakenBy.text = item.photographer
 			holder.altText.text = item.alt
 
 			// correct aspect ratio
-			val aspectRatio = item.width.toFloat() / item.height
-			holder.imageView.minimumHeight = (holder.imageView.width * aspectRatio).toInt()
+			val aspectRatioInverse = item.height.toFloat() / item.width
+			holder.imageView.layoutParams.height =
+				(holder.imageView.layoutParams.width * aspectRatioInverse).toInt()
 
 			// Background color
 			val color = Color.parseColor(item.placeHolderColor)
@@ -49,9 +48,9 @@ class PhotoResultsViewAdapter(
 		}
 	}
 
-	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
+	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
 		val inflater = LayoutInflater.from(parent.context)
 		val binding = PhotoResultLayoutBinding.inflate(inflater, parent, false)
-		return SearchViewHolder(binding)
+		return PhotoViewHolder(binding)
 	}
 }

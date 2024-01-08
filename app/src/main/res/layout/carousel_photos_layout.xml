@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.carousel.MaskableFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/carousel_item_container"
+  android:layout_width="150dp"
+  android:layout_height="match_parent"
+  android:layout_marginStart="4dp"
+  android:layout_marginEnd="4dp"
+  android:foreground="?attr/selectableItemBackground"
+  app:shapeAppearance="?attr/shapeAppearanceCornerLarge">
+
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+      android:id="@+id/carousel_image"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:scaleType="centerCrop"
+      tools:ignore="ContentDescription" />
+
+    <View
+      android:id="@+id/carousel_image_overlay"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@drawable/gradient_overlay"
+      android:visibility="invisible" />
+
+    <com.google.android.material.textview.MaterialTextView
+      android:id="@+id/photographer_name"
+      style="@style/TextAppearance.Material3.BodyMedium"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:layout_marginHorizontal="12dp"
+      android:layout_marginVertical="6dp"
+      android:layout_marginBottom="706dp"
+      android:ellipsize="end"
+      android:maxLines="2"
+      android:textColor="@color/white" />
+
+
+  </RelativeLayout>
+
+
+</com.google.android.material.carousel.MaskableFrameLayout>

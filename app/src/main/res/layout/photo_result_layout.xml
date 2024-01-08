@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  style="@style/Widget.Material3.CardView.Filled"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_margin="@dimen/photo_search_results_padding"
+  android:clickable="true"
+  app:shapeAppearance="?attr/shapeAppearanceCornerMedium">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/photo_card_padding">
+
+    <com.google.android.material.imageview.ShapeableImageView
+      android:id="@+id/image"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:adjustViewBounds="true"
+      android:minHeight="100dp"
+      android:scaleType="centerCrop"
+      app:shapeAppearance="?attr/shapeAppearanceCornerMedium" />
+
+    <Space
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/spacer_spacing_4" />
+
+    <com.google.android.material.textview.MaterialTextView
+      android:id="@+id/alt_text"
+      style="@style/TextAppearance.Material3.TitleMedium"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:ellipsize="end"
+      android:maxLines="2" />
+
+    <Space
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/spacer_spacing_4" />
+
+    <com.google.android.material.textview.MaterialTextView
+      android:id="@+id/photographer_name"
+      style="@style/TextAppearance.Material3.LabelMedium"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" />
+  </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

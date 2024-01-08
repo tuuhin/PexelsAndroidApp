@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <!--  Spacer Spacing-->
   <dimen name="spacer_spacing_4">4dp</dimen>
+  <dimen name="spacer_spacing_6">6dp</dimen>
+  <dimen name="spacer_spacing_8">8dp</dimen>
+
   <dimen name="photo_search_results_padding">4dp</dimen>
   <dimen name="photo_card_padding">6dp</dimen>
+  <dimen name="scaffold_horizontal_padding">16dp</dimen>
 </resources>

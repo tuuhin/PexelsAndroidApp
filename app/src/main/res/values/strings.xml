@@ -7,4 +7,9 @@
   <!--  Route Labels-->
   <string name="home_route">Home Route</string>
   <string name="detail_route">Details Route</string>
+  <string name="best_photos">Best Photos</string>
+  <string name="best_photos_text">Trending photos during this hour</string>
+  <string name="by_photographer">By %s</string>
+  <string name="collections_title">Collections</string>
+  <string name="collections_desc">Some of the featured collections</string>
 </resources>
