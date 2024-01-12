@@ -7,6 +7,7 @@
   android:layout_height="match_parent"
   android:layout_marginStart="4dp"
   android:layout_marginEnd="4dp"
+  android:clickable="true"
   android:foreground="?attr/selectableItemBackground"
   app:shapeAppearance="?attr/shapeAppearanceCornerLarge">
 
@@ -18,6 +19,7 @@
       android:id="@+id/carousel_image"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:background="?attr/colorSurfaceVariant"
       android:scaleType="centerCrop"
       tools:ignore="ContentDescription" />
 

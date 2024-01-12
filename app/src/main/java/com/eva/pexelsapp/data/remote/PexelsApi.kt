@@ -4,6 +4,7 @@ import com.eva.pexelsapp.BuildConfig
 import com.eva.pexelsapp.data.remote.dto.PaginatedCollectionMediaDto
 import com.eva.pexelsapp.data.remote.dto.PaginatedCollectionWrapperDto
 import com.eva.pexelsapp.data.remote.dto.PaginatedPhotoWrapperDto
+import com.eva.pexelsapp.data.remote.dto.PhotoResourceDto
 import com.eva.pexelsapp.data.remote.interceptor.AuthenticationInterceptor
 import com.eva.pexelsapp.data.remote.params.ColorOptions
 import com.eva.pexelsapp.data.remote.params.OrientationOptions
@@ -75,6 +76,14 @@ interface PexelsApi {
 		@Query("page") page: Int = AppConstants.API_INITIAL_PAGE,
 		@Query("per_page") perPage: Int = AppConstants.COLLECTION_MEDIA_PER_PAGE,
 	): PaginatedCollectionMediaDto
+
+	/**
+	 * Retrieve a specific Photo from its id.
+	 */
+	@GET("/v1/photos/{id}")
+	suspend fun getPhotoFromId(
+		@Path("id") id: Int
+	): PhotoResourceDto?
 
 
 	companion object {

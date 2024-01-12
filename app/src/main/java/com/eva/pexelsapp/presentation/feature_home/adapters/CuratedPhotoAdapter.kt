@@ -17,7 +17,8 @@ import com.eva.pexelsapp.presentation.util.PhotoResourceComparator
 import com.google.android.material.math.MathUtils.lerp
 
 class CuratedPhotoAdapter(
-	private val context: Context
+	private val context: Context,
+	private val onImageSelect: (PhotoViewHolder, PhotoResource) -> Unit,
 ) : PagingDataAdapter<PhotoResource, CuratedPhotoAdapter.PhotoViewHolder>(PhotoResourceComparator) {
 
 	inner class PhotoViewHolder(binding: CarouselPhotosLayoutBinding) :
@@ -38,7 +39,6 @@ class CuratedPhotoAdapter(
 
 	override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
 		val item = getItem(position)
-
 		holder.container.setOnMaskChangedListener { maskRect: RectF ->
 			holder.takenBy.translationX = maskRect.left
 			holder.takenBy.alpha = lerp(1f, 0f, maskRect.left)
@@ -48,14 +48,21 @@ class CuratedPhotoAdapter(
 			holder.takenBy.text = context.getString(R.string.by_photographer, item.photographer)
 			val color = Color.parseColor(item.placeHolderColor)
 			holder.image.setBackgroundColor(color)
+			holder.image.transitionName = context.getString(R.string.transition_photo, item.id)
 			val request = ImageRequest.Builder(context)
 				.data(item.sources.portrait)
-				.target(onSuccess = {
-					holder.imageOverlay.visibility = View.VISIBLE
-					holder.image.setImageDrawable(it)
-				})
+				.target(
+					onSuccess = {
+						holder.imageOverlay.visibility = View.VISIBLE
+						holder.image.setImageDrawable(it)
+					},
+				)
 				.build()
 			context.imageLoader.enqueue(request)
+
+			holder.container.setOnClickListener {
+				onImageSelect(holder, item)
+			}
 		}
 	}
 

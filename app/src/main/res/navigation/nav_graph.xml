@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/nav_graph"
+  app:startDestination="@id/home_fragment">
+
+  <fragment
+    android:id="@+id/home_fragment"
+    android:name="com.eva.pexelsapp.presentation.feature_home.HomeFragment"
+    android:label="@string/home_fragment"
+    tools:layout="@layout/home_fragment">
+    <action
+      android:id="@+id/action_home_fragment_to_photo_details_fragment"
+      app:destination="@id/photo_details_fragment" />
+  </fragment>
+
+  <fragment
+    android:id="@+id/photo_details_fragment"
+    android:name="com.eva.pexelsapp.presentation.feature_detailed.PhotoDetailsFragment"
+    android:label="@string/photo_details_fragment"
+    tools:layout="@layout/photo_detailed_fragment">
+    <argument
+      android:name="photoRes"
+      android:defaultValue="@null"
+      app:argType="com.eva.pexelsapp.data.parcelable.PhotoResourceParcelable"
+      app:nullable="true" />
+  </fragment>
+
+</navigation>

@@ -12,4 +12,13 @@
   <string name="by_photographer">By %s</string>
   <string name="collections_title">Collections</string>
   <string name="collections_desc">Some of the featured collections</string>
+  <string name="set_wallpaper_text">Set Wallpaper</string>
+  <string name="share_photo_text">Share</string>
+  <string name="download_photo_text">Download</string>
+  <!--  Transition Names-->
+  <string name="transition_photo">Transition Photo for %d</string>
+  <string name="transition_photo_large">Transition Photo Large</string>
+  <!--  Navigation-->
+  <string name="home_fragment">Home Fragment</string>
+  <string name="photo_details_fragment">Photo Details Fragment</string>
 </resources>
