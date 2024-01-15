@@ -7,6 +7,9 @@
   <dimen name="spacer_spacing_12">12dp</dimen>
   <dimen name="spacer_spacing_30">30dp</dimen>
 
+  <dimen name="collection_card_min_height">120dp</dimen>
+  <dimen name="collection_card_max_height">240dp</dimen>
+
   <dimen name="photo_search_results_padding">4dp</dimen>
   <dimen name="photo_card_padding">6dp</dimen>
   <dimen name="scaffold_horizontal_padding">16dp</dimen>

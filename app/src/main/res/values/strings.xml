@@ -20,5 +20,15 @@
   <string name="transition_photo_large">Transition Photo Large</string>
   <!--  Navigation-->
   <string name="home_fragment">Home Fragment</string>
+  <string name="search_fragment">Search Fragment</string>
   <string name="photo_details_fragment">Photo Details Fragment</string>
+  <string name="collection_fragment">Collection Fragment</string>
+  <!--  Search Bar-->
+  <string name="search_bar_filter_label">Search Filters</string>
+  <string name="no_search_results">To be worked on</string>
+  <string name="no_cached_results_text">No Saved Search</string>
+  <string name="search_filter_title">Search Filters</string>
+  <string name="dialog_done_text">Done</string>
+  <!--  Collections-->
+  <string name="collection_title">Collection</string>
 </resources>

@@ -1,8 +1,10 @@
 package com.eva.pexelsapp.di
 
+import com.eva.pexelsapp.data.repository.CollectionMediaRepoImpl
 import com.eva.pexelsapp.data.repository.CollectionsRepoImpl
 import com.eva.pexelsapp.data.repository.CuratedPhotoRepoImpl
 import com.eva.pexelsapp.data.repository.SearchRepositoryImpl
+import com.eva.pexelsapp.domain.repository.CollectionMediaRepository
 import com.eva.pexelsapp.domain.repository.CollectionsRepository
 import com.eva.pexelsapp.domain.repository.CuratedPhotoRepository
 import com.eva.pexelsapp.domain.repository.SearchRepository
@@ -19,14 +21,26 @@ abstract class RepositoryModule {
 
 	@Binds
 	@ViewModelScoped
-	abstract fun bindsSearchRepo(impl: SearchRepositoryImpl): SearchRepository
+	abstract fun bindsSearchRepo(
+		impl: SearchRepositoryImpl
+	): SearchRepository
 
 	@Binds
 	@ViewModelScoped
-	abstract fun bindsCuratedPhotoRepo(impl: CuratedPhotoRepoImpl): CuratedPhotoRepository
+	abstract fun bindsCuratedPhotoRepo(
+		impl: CuratedPhotoRepoImpl
+	): CuratedPhotoRepository
 
 	@Binds
 	@ViewModelScoped
-	abstract fun bindsCollectionRepo(impl: CollectionsRepoImpl): CollectionsRepository
+	abstract fun bindsCollectionRepo(
+		impl: CollectionsRepoImpl
+	): CollectionsRepository
+
+	@Binds
+	@ViewModelScoped
+	abstract fun bindCollectionMediaRepo(
+		impl: CollectionMediaRepoImpl
+	): CollectionMediaRepository
 
 }

@@ -12,7 +12,26 @@
     tools:layout="@layout/home_fragment">
     <action
       android:id="@+id/action_home_fragment_to_photo_details_fragment"
-      app:destination="@id/photo_details_fragment" />
+      app:destination="@id/photo_details_fragment"
+      app:restoreState="true" />
+    <action
+      android:id="@+id/action_home_fragment_to_collection_fragment"
+      app:destination="@id/collection_fragment" />
+  </fragment>
+
+  <fragment
+    android:id="@+id/collection_fragment"
+    android:name="com.eva.pexelsapp.presentation.feature_collections.PhotoCollectionFragment"
+    android:label="@string/collection_fragment"
+    tools:layout="@layout/photo_collection_fragment">
+
+    <argument
+      android:name="collection"
+      app:argType="com.eva.pexelsapp.data.parcelable.PhotoCollectionParcelable" />
+    <action
+      android:id="@+id/action_collection_fragment_to_photo_details_fragment"
+      app:destination="@id/photo_details_fragment"
+      app:restoreState="true" />
   </fragment>
 
   <fragment
@@ -22,9 +41,7 @@
     tools:layout="@layout/photo_detailed_fragment">
     <argument
       android:name="photoRes"
-      android:defaultValue="@null"
-      app:argType="com.eva.pexelsapp.data.parcelable.PhotoResourceParcelable"
-      app:nullable="true" />
+      app:argType="com.eva.pexelsapp.data.parcelable.PhotoResourceParcelable" />
   </fragment>
 
 </navigation>
