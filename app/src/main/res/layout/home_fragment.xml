@@ -1,68 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:fitsSystemWindows="true"
-  android:orientation="vertical"
-  android:paddingHorizontal="@dimen/scaffold_horizontal_padding"
-  android:paddingTop="@dimen/spacer_spacing_4">
+  tools:ignore="PrivateResource">
 
-  <com.google.android.material.textview.MaterialTextView
-    style="@style/TextAppearance.Material3.HeadlineSmall"
+  <com.google.android.material.appbar.AppBarLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/spacer_spacing_4"
-    android:text="@string/best_photos" />
+    app:layout_insetEdge="top">
 
-  <com.google.android.material.textview.MaterialTextView
-    style="@style/TextAppearance.Material3.BodyMedium"
+    <com.google.android.material.search.SearchBar
+      android:id="@+id/search_bar"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/m3_searchbar_height"
+      android:hint="@string/search_bar_placeholder"
+      app:menu="@menu/search_bar_filter_menu" />
+
+  </com.google.android.material.appbar.AppBarLayout>
+
+
+  <com.google.android.material.search.SearchView
+    android:id="@+id/search_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="@string/best_photos_text"
-    android:textColor="?attr/colorOnSurfaceVariant" />
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="false"
+    app:layout_anchor="@id/search_bar">
 
-  <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/curated_photos"
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/search_results"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      tools:itemCount="10"
+      tools:listitem="@layout/search_results_layout" />
+
+  </com.google.android.material.search.SearchView>
+
+  <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight=".4"
-    android:orientation="horizontal"
-    android:paddingVertical="@dimen/spacer_spacing_12"
-    app:layoutManager="com.google.android.material.carousel.CarouselLayoutManager"
-    tools:itemCount="3"
-    tools:listitem="@layout/carousel_photos_layout" />
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/scaffold_horizontal_padding"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <com.google.android.material.textview.MaterialTextView
+      style="@style/TextAppearance.Material3.HeadlineSmall"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingTop="@dimen/spacer_spacing_4"
+      android:text="@string/best_photos" />
+
+    <com.google.android.material.textview.MaterialTextView
+      style="@style/TextAppearance.Material3.BodyMedium"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/best_photos_text"
+      android:textColor="?attr/colorOnSurfaceVariant" />
+
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/curated_photos"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight=".4"
+      android:orientation="horizontal"
+      android:paddingVertical="@dimen/spacer_spacing_12"
+      app:layoutManager="com.google.android.material.carousel.CarouselLayoutManager"
+      tools:itemCount="3"
+      tools:listitem="@layout/carousel_photos_layout" />
 
 
-  <com.google.android.material.textview.MaterialTextView
-    style="@style/TextAppearance.Material3.HeadlineSmall"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="@dimen/spacer_spacing_4"
-    android:text="@string/collections_title" />
+    <com.google.android.material.textview.MaterialTextView
+      style="@style/TextAppearance.Material3.HeadlineSmall"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingTop="@dimen/spacer_spacing_4"
+      android:text="@string/collections_title" />
 
-  <com.google.android.material.textview.MaterialTextView
-    style="@style/TextAppearance.Material3.BodyMedium"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="@string/collections_desc"
-    android:textColor="?attr/colorOnSurfaceVariant" />
-
-
-  <androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/collections"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight=".5"
-    android:paddingVertical="@dimen/spacer_spacing_12"
-    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-    tools:itemCount="10"
-    tools:listitem="@layout/collection_media_layout" />
-
-</LinearLayout>
+    <com.google.android.material.textview.MaterialTextView
+      style="@style/TextAppearance.Material3.BodyMedium"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/collections_desc"
+      android:textColor="?attr/colorOnSurfaceVariant" />
 
 
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/collections"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight=".5"
+      android:paddingVertical="@dimen/spacer_spacing_12"
+      app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+      tools:itemCount="10"
+      tools:listitem="@layout/collection_layout" />
+
+  </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

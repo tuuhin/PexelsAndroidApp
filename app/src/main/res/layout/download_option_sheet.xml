@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_marginHorizontal="@dimen/scaffold_horizontal_padding"
+  android:orientation="vertical">
+
+  <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+
+  <Button
+    android:id="@+id/option_portrait"
+    style="@style/Widget.Material3.Button.IconButton.Filled"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spacer_spacing_4"
+    android:paddingVertical="@dimen/spacer_spacing_12"
+    android:text="@string/download_option_portrait"
+    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+    app:shapeAppearance="?attr/shapeAppearanceCornerMedium" />
+
+  <Button
+    android:id="@+id/option_landscape"
+    style="@style/Widget.Material3.Button.OutlinedButton"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spacer_spacing_4"
+    android:paddingVertical="@dimen/spacer_spacing_12"
+    android:text="@string/download_option_landscape"
+
+    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+    app:shapeAppearance="?attr/shapeAppearanceCornerMedium" />
+
+
+  <Button
+    android:id="@+id/option_medium"
+    style="@style/Widget.Material3.Button.OutlinedButton"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spacer_spacing_4"
+    android:paddingVertical="@dimen/spacer_spacing_12"
+    android:text="@string/download_option_medium"
+
+    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+    app:shapeAppearance="?attr/shapeAppearanceCornerMedium" />
+
+  <Button
+    android:id="@+id/option_large"
+    style="@style/Widget.Material3.Button.OutlinedButton"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="@dimen/spacer_spacing_12"
+    android:text="@string/download_option_large"
+    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+    app:shapeAppearance="?attr/shapeAppearanceCornerMedium" />
+
+
+</LinearLayout>
+

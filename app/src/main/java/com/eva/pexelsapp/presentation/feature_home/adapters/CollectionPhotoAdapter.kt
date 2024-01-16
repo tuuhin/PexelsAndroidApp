@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.dispose
 import coil.imageLoader
 import coil.request.ImageRequest
+import com.eva.pexelsapp.R
 import com.eva.pexelsapp.databinding.CollectionLayoutBinding
 import com.eva.pexelsapp.domain.models.PhotoCollection
 import com.eva.pexelsapp.presentation.util.PhotoCollectionComparator
@@ -28,6 +29,7 @@ class CollectionPhotoAdapter(
 		RecyclerView.ViewHolder(binding.root) {
 		val image = binding.collectionImage
 		val title = binding.collectionTitle
+		val photoCount = binding.collectionPhotoCount
 		val overlay = binding.gradientOverlay
 		val container = binding.collectionContainer
 	}
@@ -43,6 +45,9 @@ class CollectionPhotoAdapter(
 		item?.let { model ->
 			// Collection Title
 			holder.title.text = model.title
+
+			holder.photoCount.text =
+				context.getString(R.string.bracket_surrounded_number, model.photosCount)
 
 			model.resource?.let { res ->
 				// Background color

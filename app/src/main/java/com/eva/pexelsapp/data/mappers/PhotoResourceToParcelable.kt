@@ -9,6 +9,7 @@ fun PhotoResource.toParcelable(): PhotoResourceParcelable = PhotoResourceParcela
 	photographerUrl = photographerUrl,
 	photoGraphBy = photographer,
 	placeHolderColor = placeHolderColor,
+	photoUrl = url,
 	images = ImageParcelable(
 		medium = sources.medium,
 		landScape = sources.landScape,

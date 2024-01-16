@@ -21,7 +21,7 @@
 
   <fragment
     android:id="@+id/collection_fragment"
-    android:name="com.eva.pexelsapp.presentation.feature_collections.PhotoCollectionFragment"
+    android:name="com.eva.pexelsapp.presentation.feature_collections.CollectionMediaFragment"
     android:label="@string/collection_fragment"
     tools:layout="@layout/photo_collection_fragment">
 

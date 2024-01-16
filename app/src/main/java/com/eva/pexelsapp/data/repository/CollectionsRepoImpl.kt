@@ -2,6 +2,7 @@ package com.eva.pexelsapp.data.repository
 
 import androidx.paging.Pager
 import androidx.paging.PagingData
+import androidx.paging.filter
 import androidx.paging.map
 import com.eva.pexelsapp.data.mappers.toModel
 import com.eva.pexelsapp.data.pager.PhotoCollectionWithResourceDto
@@ -15,11 +16,13 @@ class CollectionsRepoImpl @Inject constructor(
 	private val pager: Pager<Int, PhotoCollectionWithResourceDto>
 ) : CollectionsRepository {
 	override val collections: Flow<PagingData<PhotoCollection>>
-		get() = pager.flow.map { pagingData ->
-			pagingData.map { (collection, photo) ->
-				val resModel = photo?.toModel()
-				collection.toModel(resModel)
-			}
+		get() = pager.flow.map { pagedData ->
+			pagedData
+				.filter { (_, photo) -> photo != null }
+				.map { (collection, photo) ->
+					val resModel = photo?.toModel()
+					collection.toModel(resModel)
+				}
 		}
 
 }

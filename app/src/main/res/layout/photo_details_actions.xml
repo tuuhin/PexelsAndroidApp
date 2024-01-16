@@ -6,7 +6,7 @@
   android:orientation="vertical">
 
   <Button
-    android:id="@+id/filledTonalButton"
+    android:id="@+id/setWallpaperButton"
     style="@style/Widget.Material3.Button.IconButton.Filled"
     android:layout_width="match_parent"
     android:layout_height="@dimen/photo_action_button_dimension"
@@ -25,6 +25,7 @@
     android:orientation="horizontal">
 
     <Button
+      android:id="@+id/share_button"
       style="@style/Widget.Material3.Button.IconButton.Outlined"
       android:layout_width="0dp"
       android:layout_height="@dimen/photo_action_button_dimension"
@@ -37,6 +38,7 @@
       app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Large" />
 
     <Button
+      android:id="@+id/download_picture_button"
       style="@style/Widget.Material3.Button.IconButton.Outlined"
       android:layout_width="0dp"
       android:layout_height="@dimen/photo_action_button_dimension"

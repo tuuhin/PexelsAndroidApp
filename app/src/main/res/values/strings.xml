@@ -3,7 +3,6 @@
   <!--  SearchBar-->
   <string name="search_bar_hint">Search for a image</string>
   <string name="search_bar_placeholder">Search..</string>
-
   <!--  Route Labels-->
   <string name="home_route">Home Route</string>
   <string name="detail_route">Details Route</string>
@@ -31,4 +30,13 @@
   <string name="dialog_done_text">Done</string>
   <!--  Collections-->
   <string name="collection_title">Collection</string>
+  <string name="bracket_surrounded_number">( %d )</string>
+  <!--  Details -->
+  <string name="info_menu_option_title">Information</string>
+  <!--  Download Options-->
+  <string name="download_option_medium">Medium</string>
+  <string name="download_option_large">Large</string>
+  <string name="download_option_landscape">Landscape</string>
+  <string name="download_option_portrait">Portrait</string>
+
 </resources>

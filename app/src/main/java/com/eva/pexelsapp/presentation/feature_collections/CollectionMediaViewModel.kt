@@ -1,5 +1,6 @@
 package com.eva.pexelsapp.presentation.feature_collections
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -12,16 +13,19 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PhotoCollectionViewModel @Inject constructor(
+class CollectionMediaViewModel @Inject constructor(
 	private val repository: CollectionMediaRepository
 ) : ViewModel() {
+
 
 	val collection: Flow<PagingData<PhotoResource>> =
 		repository.collectionMedia.cachedIn(viewModelScope)
 
 	fun loadCollectionFromId(collectionId: String) = viewModelScope.launch {
-		// TODO: Add some functionality to show the user its loading
+
+		Log.d("REQUESTED", "COLL_ID:$collectionId")
 		repository.loadCollection(id = collectionId)
+
 	}
 
 }

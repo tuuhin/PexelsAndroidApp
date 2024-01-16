@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.dispose
 import coil.imageLoader
 import coil.request.ImageRequest
 import com.eva.pexelsapp.R
@@ -16,10 +17,13 @@ import com.eva.pexelsapp.domain.models.PhotoResource
 import com.eva.pexelsapp.presentation.util.PhotoResourceComparator
 import com.google.android.material.math.MathUtils.lerp
 
+private typealias CuratedPhotoSelectCallBack = (CuratedPhotoAdapter.PhotoViewHolder, PhotoResource) -> Unit
+
 class CuratedPhotoAdapter(
 	private val context: Context,
-	private val onImageSelect: (PhotoViewHolder, PhotoResource) -> Unit,
 ) : PagingDataAdapter<PhotoResource, CuratedPhotoAdapter.PhotoViewHolder>(PhotoResourceComparator) {
+
+	private var onImageSelect: CuratedPhotoSelectCallBack? = null
 
 	inner class PhotoViewHolder(binding: CarouselPhotosLayoutBinding) :
 		RecyclerView.ViewHolder(binding.root) {
@@ -46,9 +50,12 @@ class CuratedPhotoAdapter(
 
 		item?.let {
 			holder.takenBy.text = context.getString(R.string.by_photographer, item.photographer)
+			//Background Color
 			val color = Color.parseColor(item.placeHolderColor)
 			holder.image.setBackgroundColor(color)
+			//Transition Name
 			holder.image.transitionName = context.getString(R.string.transition_photo, item.id)
+			//Image
 			val request = ImageRequest.Builder(context)
 				.data(item.sources.portrait)
 				.target(
@@ -61,9 +68,18 @@ class CuratedPhotoAdapter(
 			context.imageLoader.enqueue(request)
 
 			holder.container.setOnClickListener {
-				onImageSelect(holder, item)
+				onImageSelect?.invoke(holder, item)
 			}
 		}
+	}
+
+	override fun onViewDetachedFromWindow(holder: PhotoViewHolder) {
+		super.onViewDetachedFromWindow(holder)
+		holder.image.dispose()
+	}
+
+	fun onPhotoSelect(callback: CuratedPhotoSelectCallBack) {
+		onImageSelect = callback
 	}
 
 }

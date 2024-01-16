@@ -25,13 +25,15 @@ import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class PhotoCollectionFragment : Fragment() {
+class CollectionMediaFragment : Fragment() {
 
-	private val navArgs by navArgs<PhotoCollectionFragmentArgs>()
+	private val navArgs by navArgs<CollectionMediaFragmentArgs>()
 
-	private val viewModel by viewModels<PhotoCollectionViewModel>()
+	private val viewModel by viewModels<CollectionMediaViewModel>()
 
 	private var _binding: PhotoCollectionFragmentBinding? = null
+
+	private var _isCollectionRequested = false
 
 	private val binding: PhotoCollectionFragmentBinding
 		get() = _binding!!
@@ -45,8 +47,6 @@ class PhotoCollectionFragment : Fragment() {
 
 		// Set up title bar
 		setUpTitleBar()
-		// Setup content extras
-		setUpContentDesc()
 		// Set up the recycle view collection
 		setUpCollectionMediaRecycleView()
 
@@ -68,7 +68,10 @@ class PhotoCollectionFragment : Fragment() {
 		)
 
 		val collectionId = navArgs.collection.collectionId
-		viewModel.loadCollectionFromId(collectionId = collectionId)
+		if (!_isCollectionRequested) {
+			viewModel.loadCollectionFromId(collectionId = collectionId)
+			_isCollectionRequested = true
+		}
 	}
 
 
@@ -80,19 +83,16 @@ class PhotoCollectionFragment : Fragment() {
 	private fun setUpTitleBar() {
 
 		binding.collectionTitleBar.title = navArgs.collection.title
+		navArgs.collection.desc?.let { desc ->
+			binding.collectionTitleBar.subtitle = desc
+		}
 
 		binding.collectionTitleBar.setNavigationOnClickListener {
 			requireActivity().onNavigateUp()
 		}
+
 	}
 
-	private fun setUpContentDesc() {
-		navArgs.collection.desc?.let { des ->
-			binding.collectionDesc.text = des
-		} ?: kotlin.run {
-			binding.collectionDesc.visibility = View.INVISIBLE
-		}
-	}
 
 	private fun setUpCollectionMediaRecycleView(context: Context = requireContext()) {
 
@@ -108,7 +108,7 @@ class PhotoCollectionFragment : Fragment() {
 				)
 				.build()
 
-			val destination = PhotoCollectionFragmentDirections
+			val destination = CollectionMediaFragmentDirections
 				.actionCollectionFragmentToPhotoDetailsFragment(photoRes = photo.toParcelable())
 
 			navController.navigate(directions = destination, navigatorExtras = extras)
@@ -118,12 +118,13 @@ class PhotoCollectionFragment : Fragment() {
 			RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
 
 		binding.collectionResults.apply {
-			this.adapter = collectionMediaAdapter
-			this.layoutManager = layoutManager
-			lifecycleScope.launch {
-				viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-					viewModel.collection.collect(collectionMediaAdapter::submitData)
-				}
+			this@apply.adapter = collectionMediaAdapter
+			this@apply.layoutManager = layoutManager
+		}
+
+		lifecycleScope.launch {
+			viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+				viewModel.collection.collect(collectionMediaAdapter::submitData)
 			}
 		}
 	}
