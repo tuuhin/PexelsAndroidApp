@@ -7,6 +7,7 @@ plugins {
 	id("com.google.dagger.hilt.android")
 	id("kotlin-parcelize")
 	id("androidx.navigation.safeargs.kotlin")
+	id("com.google.protobuf")
 }
 
 android {
@@ -83,8 +84,33 @@ dependencies {
 	// dependency injection
 	implementation("com.google.dagger:hilt-android:2.50")
 	ksp("com.google.dagger:hilt-android-compiler:2.50")
+	//splash
+	implementation("androidx.core:core-splashscreen:1.0.1")
+	//datastore
+	implementation("androidx.datastore:datastore:1.0.0")
+	implementation("com.google.protobuf:protobuf-javalite:3.25.1")
 	//tests
 	testImplementation("junit:junit:4.13.2")
 	androidTestImplementation("androidx.test.ext:junit:1.1.5")
 	androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+}
+
+protobuf {
+	protoc {
+		artifact = "com.google.protobuf:protoc:3.25.1"
+	}
+	plugins {
+		create("java") {
+			artifact = "com.google.protobuf:protobuf-javalite:3.25.1"
+		}
+	}
+	generateProtoTasks {
+		all().forEach { task ->
+			task.builtins {
+				create("java") {
+					option("lite")
+				}
+			}
+		}
+	}
 }

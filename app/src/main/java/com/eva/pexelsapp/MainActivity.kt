@@ -2,6 +2,7 @@ package com.eva.pexelsapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.eva.pexelsapp.databinding.ActivityMainBinding
@@ -14,6 +15,8 @@ class MainActivity : AppCompatActivity() {
 	private lateinit var navController: NavController
 
 	override fun onCreate(savedInstanceState: Bundle?) {
+//		//splash screen from splash api
+		installSplashScreen()
 
 		super.onCreate(savedInstanceState)
 
