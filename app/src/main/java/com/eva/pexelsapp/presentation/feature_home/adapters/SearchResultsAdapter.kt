@@ -6,51 +6,74 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.dispose
 import coil.imageLoader
 import coil.request.ImageRequest
-import com.eva.pexelsapp.databinding.PhotoResultLayoutBinding
+import com.eva.pexelsapp.R
+import com.eva.pexelsapp.databinding.SearchResultsLayoutBinding
 import com.eva.pexelsapp.domain.models.PhotoResource
 import com.eva.pexelsapp.presentation.util.PhotoResourceComparator
 
+private typealias OnSearchSelectCallBack = (SearchResultsAdapter.PhotoViewHolder, PhotoResource) -> Unit
+
 class SearchResultsAdapter(
-	private val context: Context
+	private val context: Context,
 ) : PagingDataAdapter<PhotoResource, SearchResultsAdapter.PhotoViewHolder>(PhotoResourceComparator) {
 
-	inner class PhotoViewHolder(binding: PhotoResultLayoutBinding) :
+	private var _onSearchSelect: OnSearchSelectCallBack? = null
+
+	inner class PhotoViewHolder(binding: SearchResultsLayoutBinding) :
 		RecyclerView.ViewHolder(binding.root) {
-		var photoTakenBy = binding.photographerName
-		var altText = binding.altText
-		var imageView = binding.image
+		val container = binding.container
+		val photoTakenBy = binding.photographerName
+		val altText = binding.altText
+		val imageView = binding.image
+	}
+
+	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
+		val inflater = LayoutInflater.from(parent.context)
+		val binding = SearchResultsLayoutBinding.inflate(inflater, parent, false)
+		return PhotoViewHolder(binding)
 	}
 
 	override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
 		val item = getItem(position)
-		item?.let {
-			holder.photoTakenBy.text = item.photographer
-			holder.altText.text = item.alt
+		item?.let { resource ->
 
-			// correct aspect ratio
-			val aspectRatioInverse = item.height.toFloat() / item.width
-			holder.imageView.layoutParams.height =
-				(holder.imageView.layoutParams.width * aspectRatioInverse).toInt()
+			holder.photoTakenBy.text =
+				context.getString(R.string.by_photographer, resource.photographer)
+			holder.altText.text = item.alt
 
 			// Background color
 			val color = Color.parseColor(item.placeHolderColor)
 			holder.imageView.setBackgroundColor(color)
 
+			// transition name
+			holder.imageView.transitionName =
+				context.getString(R.string.transition_photo, resource.id)
+
 			// load the image
 			val request = ImageRequest.Builder(context)
-				.data(item.sources.medium)
+				.data(resource.sources.medium)
 				.target(holder.imageView)
 				.build()
 
 			context.imageLoader.enqueue(request)
+
+			holder.container.setOnClickListener {
+				_onSearchSelect?.invoke(holder, item)
+			}
 		}
 	}
 
-	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
-		val inflater = LayoutInflater.from(parent.context)
-		val binding = PhotoResultLayoutBinding.inflate(inflater, parent, false)
-		return PhotoViewHolder(binding)
+	override fun onViewDetachedFromWindow(holder: PhotoViewHolder) {
+		super.onViewDetachedFromWindow(holder)
+		// Cancels the request if there is one
+		holder.imageView.dispose()
 	}
+
+	fun onSearchSelect(callback: OnSearchSelectCallBack) {
+		_onSearchSelect = callback
+	}
+
 }

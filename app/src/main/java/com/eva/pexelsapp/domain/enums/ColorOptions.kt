@@ -1,4 +1,4 @@
-package com.eva.pexelsapp.data.remote.params
+package com.eva.pexelsapp.domain.enums
 
 enum class ColorOptions(val color: String) {
 	RED("red"),

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <com.google.android.material.textview.MaterialTextView
+    style="@style/TextAppearance.Material3.TitleMedium"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="@dimen/spacer_spacing_4"
+    android:text="@string/search_filter_size_options" />
+
+  <com.google.android.material.card.MaterialCardView
+    style="@style/Widget.Material3.CardView.Filled"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Medium">
+
+    <RadioGroup
+      android:id="@+id/size_options"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/spacer_spacing_8">
+
+      <RadioButton
+        android:id="@+id/size_option_all"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/search_filter_size_option_all"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+
+      <RadioButton
+        android:id="@+id/size_option_large"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/search_filter_size_option_large"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+
+      <RadioButton
+        android:id="@+id/size_option_medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/search_filter_size_option_medium"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+
+      <RadioButton
+        android:id="@+id/size_option_small"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/search_filter_size_option_small"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium" />
+
+    </RadioGroup>
+
+  </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

@@ -6,10 +6,7 @@ import com.eva.pexelsapp.data.remote.dto.PaginatedCollectionWrapperDto
 import com.eva.pexelsapp.data.remote.dto.PaginatedPhotoWrapperDto
 import com.eva.pexelsapp.data.remote.dto.PhotoResourceDto
 import com.eva.pexelsapp.data.remote.interceptor.AuthenticationInterceptor
-import com.eva.pexelsapp.data.remote.params.ColorOptions
-import com.eva.pexelsapp.data.remote.params.OrientationOptions
-import com.eva.pexelsapp.data.remote.params.SizeOptions
-import com.eva.pexelsapp.data.remote.params.SortOrder
+import com.eva.pexelsapp.domain.enums.SortOrder
 import com.eva.pexelsapp.utils.AppConstants
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -30,9 +27,9 @@ interface PexelsApi {
 	@GET("/v1/search")
 	suspend fun searchPhoto(
 		@Query("query") query: String,
-		@Query("orientation") orientation: OrientationOptions? = null,
-		@Query("size") size: SizeOptions? = null,
-		@Query("color") color: ColorOptions? = null,
+		@Query("orientation") orientation: String? = null,
+		@Query("size") size: String? = null,
+		@Query("color") color: String? = null,
 		@Query("page") page: Int = AppConstants.API_INITIAL_PAGE,
 		@Query("per_page") perPage: Int = AppConstants.API_PER_PAGE_SIZE,
 	): PaginatedPhotoWrapperDto
@@ -71,7 +68,7 @@ interface PexelsApi {
 	@GET("/v1/collections/{id}")
 	suspend fun getCollectionMedia(
 		@Path("id") collectionId: String,
-		@Query("sort") sort: SortOrder? = null,
+		@Query("sort") sort: String? = SortOrder.ASC.order,
 		@Query("type") type: String = AppConstants.COLLECTION_MEDIA_TYPE,
 		@Query("page") page: Int = AppConstants.API_INITIAL_PAGE,
 		@Query("per_page") perPage: Int = AppConstants.COLLECTION_MEDIA_PER_PAGE,

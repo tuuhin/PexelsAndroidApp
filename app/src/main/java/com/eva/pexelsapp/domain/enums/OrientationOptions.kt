@@ -1,4 +1,4 @@
-package com.eva.pexelsapp.data.remote.params
+package com.eva.pexelsapp.domain.enums
 
 enum class OrientationOptions(val string: String) {
 	LANDSCAPE("landscape"),

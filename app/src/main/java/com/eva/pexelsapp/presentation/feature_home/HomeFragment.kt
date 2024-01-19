@@ -1,6 +1,5 @@
 package com.eva.pexelsapp.presentation.feature_home
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +22,8 @@ import com.eva.pexelsapp.databinding.HomeFragmentBinding
 import com.eva.pexelsapp.presentation.feature_home.adapters.CollectionPhotoAdapter
 import com.eva.pexelsapp.presentation.feature_home.adapters.CuratedPhotoAdapter
 import com.eva.pexelsapp.presentation.feature_home.adapters.SearchResultsAdapter
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
 import com.google.android.material.carousel.MultiBrowseCarouselStrategy
@@ -53,6 +54,8 @@ class HomeFragment : Fragment() {
 		setUpCuratedPhotos()
 		//setUp search
 		setUpSearchBinding()
+		//setup search filters
+		setUpSearchFilters()
 
 		return binding.root
 	}
@@ -70,8 +73,30 @@ class HomeFragment : Fragment() {
 		_binding = null
 	}
 
+	private fun setUpSearchFilters() {
+		val bottomSheet = SearchFilterBottomSheet(filtersFlow = viewModel.searchFilters).apply {
+			(dialog as? BottomSheetDialog)
+				?.apply {
+					behavior.isHideable = true
+					behavior.isFitToContents = true
+					behavior.saveFlags = BottomSheetBehavior.SAVE_NONE
+				}
+		}
 
-	private fun setUpCollections(context: Context = requireContext()) {
+		bottomSheet.onOrientationChangeListener(viewModel::setSearchFilterOrientation)
+
+		bottomSheet.onSizeChangeListener(viewModel::setSearchFilterSize)
+
+		binding.searchBar.setOnMenuItemClickListener {
+			bottomSheet.show(parentFragmentManager, SearchFilterBottomSheet.TAG)
+			true
+		}
+	}
+
+
+	private fun setUpCollections() {
+
+		val context = requireContext()
 
 		val collectionAdapter = CollectionPhotoAdapter(context = context)
 
@@ -89,15 +114,16 @@ class HomeFragment : Fragment() {
 		binding.collections.apply {
 			this@apply.adapter = collectionAdapter
 			this@apply.layoutManager = layoutManager
-			lifecycleScope.launch {
-				viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-					viewModel.photoCollections.collect(collectionAdapter::submitData)
-				}
+		}
+		lifecycleScope.launch {
+			viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+				viewModel.photoCollections.collect(collectionAdapter::submitData)
 			}
 		}
 	}
 
-	private fun setUpSearchBinding(context: Context = requireContext()) {
+	private fun setUpSearchBinding() {
+		val context = requireContext()
 
 		val searchResultsAdapter = SearchResultsAdapter(context = context)
 
@@ -128,17 +154,19 @@ class HomeFragment : Fragment() {
 		}
 
 		binding.searchResults.apply {
-			adapter = searchResultsAdapter
+			this.adapter = searchResultsAdapter
 			this.layoutManager = layoutManager
-			lifecycleScope.launch {
-				viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-					viewModel.searchResults.collect(searchResultsAdapter::submitData)
-				}
+		}
+		lifecycleScope.launch {
+			viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+				viewModel.searchResults.collect(searchResultsAdapter::submitData)
 			}
 		}
 	}
 
-	private fun setUpCuratedPhotos(context: Context = requireContext()) {
+	private fun setUpCuratedPhotos() {
+
+		val context = requireContext()
 
 		val curatedPhotoAdapter = CuratedPhotoAdapter(context = context)
 
@@ -163,9 +191,8 @@ class HomeFragment : Fragment() {
 		val layoutManager = CarouselLayoutManager(carouselStrategy)
 
 		binding.curatedPhotos.apply {
-
 			snapHelper.attachToRecyclerView(this)
-			adapter = curatedPhotoAdapter
+			this.adapter = curatedPhotoAdapter
 			this.layoutManager = layoutManager
 		}
 

@@ -38,5 +38,16 @@
   <string name="download_option_large">Large</string>
   <string name="download_option_landscape">Landscape</string>
   <string name="download_option_portrait">Portrait</string>
-
+  <!--  Search Filters-->
+  <string name="search_filters_title">Search Filters</string>
+  <string name="search_filter_orientation">Orientation</string>
+  <string name="search_filter_orientation_all">All</string>
+  <string name="search_filter_orientation_portrait">Portrait</string>
+  <string name="search_filter_orientation_square">Square</string>
+  <string name="search_filter_orientation_landscape">Landscape</string>
+  <string name="search_filter_size_options">Sizes</string>
+  <string name="search_filter_size_option_large">Large</string>
+  <string name="search_filter_size_option_medium">Medium</string>
+  <string name="search_filter_size_option_small">Small</string>
+  <string name="search_filter_size_option_all">All</string>
 </resources>

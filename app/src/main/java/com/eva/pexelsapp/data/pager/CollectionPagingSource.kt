@@ -26,7 +26,8 @@ class CollectionPagingSource(
 
 				val results = api.featuredCollections(page = key, perPage = loadSize)
 
-				val collectionWithPhotos = results.collections.filter { it.photosCount >= 0 }
+				//ensures we only take collection that contains at least a photo
+				val collectionWithPhotos = results.collections.filter { it.photosCount > 0 }
 
 				val collectionPhoto = collectionWithPhotos.map {
 					async(Dispatchers.IO) {
