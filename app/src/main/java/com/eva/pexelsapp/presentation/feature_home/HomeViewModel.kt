@@ -13,6 +13,7 @@ import com.eva.pexelsapp.domain.repository.CollectionsRepository
 import com.eva.pexelsapp.domain.repository.CuratedPhotoRepository
 import com.eva.pexelsapp.domain.repository.SearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.shareIn
@@ -39,9 +40,14 @@ class HomeViewModel @Inject constructor(
 	val searchFilters: Flow<SearchFilters> = searchRepository.searchFilters
 		.shareIn(viewModelScope, SharingStarted.Lazily)
 
-	fun onSearch(query: String) = viewModelScope.launch {
-		val trimmedQuery = query.trim()
-		searchRepository.searchPhoto(trimmedQuery)
+	private var _searchJob: Job? = null
+
+	fun onSearch(query: String) {
+		_searchJob?.cancel()
+		_searchJob = viewModelScope.launch {
+			val trimmedQuery = query.trim()
+			searchRepository.searchPhoto(trimmedQuery)
+		}
 	}
 
 	fun setSearchFilterOrientation(orientation: OrientationOptions? = null) =

@@ -6,13 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.view.doOnPreDraw
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -20,6 +22,7 @@ import com.eva.pexelsapp.R
 import com.eva.pexelsapp.data.mappers.toParcelable
 import com.eva.pexelsapp.databinding.HomeFragmentBinding
 import com.eva.pexelsapp.presentation.feature_home.adapters.CollectionPhotoAdapter
+import com.eva.pexelsapp.presentation.feature_home.adapters.CommonFooterAdapter
 import com.eva.pexelsapp.presentation.feature_home.adapters.CuratedPhotoAdapter
 import com.eva.pexelsapp.presentation.feature_home.adapters.SearchResultsAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -27,13 +30,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
 import com.google.android.material.carousel.MultiBrowseCarouselStrategy
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
-	private val viewModel by activityViewModels<HomeViewModel>()
+	private val viewModel by viewModels<HomeViewModel>()
 
 	private var _binding: HomeFragmentBinding? = null
 
@@ -50,11 +54,11 @@ class HomeFragment : Fragment() {
 
 		// setting up collections
 		setUpCollections()
-		// setting up curated photos
+//		// setting up curated photos
 		setUpCuratedPhotos()
-		//setUp search
+//		//setUp search
 		setUpSearchBinding()
-		//setup search filters
+//		//setup search filters
 		setUpSearchFilters()
 
 		return binding.root
@@ -111,10 +115,17 @@ class HomeFragment : Fragment() {
 
 		val layoutManager = LinearLayoutManager(context)
 
+		val collectionAdapterWithFooter = with(collectionAdapter) {
+			val footer = CommonFooterAdapter(context)
+			footer.onRetryCallback(this::retry)
+			withLoadStateFooter(footer)
+		}
+
 		binding.collections.apply {
-			this@apply.adapter = collectionAdapter
+			this@apply.adapter = collectionAdapterWithFooter
 			this@apply.layoutManager = layoutManager
 		}
+
 		lifecycleScope.launch {
 			viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 				viewModel.photoCollections.collect(collectionAdapter::submitData)
@@ -157,11 +168,42 @@ class HomeFragment : Fragment() {
 			this.adapter = searchResultsAdapter
 			this.layoutManager = layoutManager
 		}
+
 		lifecycleScope.launch {
 			viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
 				viewModel.searchResults.collect(searchResultsAdapter::submitData)
 			}
 		}
+
+		lifecycleScope.launch {
+			viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+				searchResultsAdapter.loadStateFlow.collect { state ->
+
+					(state.refresh as? LoadState.Error)?.let { errorState ->
+						val errorMessage = errorState.error.localizedMessage
+							?: context.getString(R.string.unknown_error_message)
+
+						val dialog = MaterialAlertDialogBuilder(context)
+							.setTitle(R.string.search_error_title)
+							.setMessage(errorMessage)
+							.setNegativeButton(R.string.close_dialog_text) { dialog, _ ->
+								dialog.dismiss()
+							}
+							.create()
+
+						dialog.show()
+					}
+
+					binding.searchProgressIndicator.root.isVisible =
+						state.refresh is LoadState.Loading
+
+					binding.searchResults.isVisible =
+						state.refresh is LoadState.NotLoading
+
+				}
+			}
+		}
+
 	}
 
 	private fun setUpCuratedPhotos() {

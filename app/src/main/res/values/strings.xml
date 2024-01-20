@@ -50,4 +50,12 @@
   <string name="search_filter_size_option_medium">Medium</string>
   <string name="search_filter_size_option_small">Small</string>
   <string name="search_filter_size_option_all">All</string>
+  <!--  Error Container Title-->
+  <string name="searching_text">Searching…</string>
+  <string name="search_error_title">Cannot Search</string>
+  <string name="close_dialog_text">Close</string>
+  <string name="unknown_error_message">Unknown Error Message</string>
+  <string name="retry_text">Retry</string>
+  <string name="loading_text">Loading…</string>
+  <string name="failed_to_load_collection">Failed To Load Collection</string>
 </resources>
