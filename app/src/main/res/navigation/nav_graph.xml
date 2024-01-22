@@ -40,7 +40,7 @@
     android:label="@string/photo_details_fragment"
     tools:layout="@layout/photo_detailed_fragment">
     <argument
-      android:name="photoRes"
+      android:name="photo"
       app:argType="com.eva.pexelsapp.data.parcelable.PhotoResourceParcelable" />
   </fragment>
 

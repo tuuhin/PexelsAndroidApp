@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical"
+  android:padding="@dimen/spacer_spacing_12">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <com.google.android.material.textview.MaterialTextView
+      style="@style/TextAppearance.Material3.TitleSmall"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/photo_info_dimensions" />
+
+    <Space
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight=".8" />
+
+    <com.google.android.material.textview.MaterialTextView
+      android:id="@+id/photo_dimen"
+      style="@style/TextAppearance.Material3.BodyMedium"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingVertical="@dimen/spacer_spacing_12" />
+
+  </LinearLayout>
+
+  <com.google.android.material.divider.MaterialDivider
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <com.google.android.material.textview.MaterialTextView
+      style="@style/TextAppearance.Material3.TitleSmall"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/photo_info_photo_taken_by" />
+
+    <Space
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight=".8" />
+
+    <Button
+      android:id="@+id/photographer_name"
+
+      style="@style/Widget.Material3.Button.TextButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+
+  </LinearLayout>
+
+  <com.google.android.material.divider.MaterialDivider
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingVertical="@dimen/spacer_spacing_12">
+
+    <com.google.android.material.textview.MaterialTextView
+      style="@style/TextAppearance.Material3.TitleSmall"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/place_holder_color" />
+
+    <Space
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight=".8" />
+
+    <LinearLayout
+
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:orientation="horizontal">
+
+      <View
+        android:id="@+id/color_actual"
+        android:layout_width="@dimen/spacer_spacing_12"
+        android:layout_height="@dimen/spacer_spacing_12" />
+
+      <Space
+        android:layout_width="@dimen/spacer_spacing_4"
+        android:layout_height="match_parent" />
+
+      <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/color_hex"
+        style="@style/TextAppearance.Material3.BodyMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+  </LinearLayout>
+
+</LinearLayout>

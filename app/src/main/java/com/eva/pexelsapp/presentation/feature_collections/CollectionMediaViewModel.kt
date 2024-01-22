@@ -9,7 +9,6 @@ import com.eva.pexelsapp.data.parcelable.PhotoCollectionParcelable
 import com.eva.pexelsapp.domain.models.PhotoResource
 import com.eva.pexelsapp.domain.repository.CollectionMediaRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -25,8 +24,6 @@ class CollectionMediaViewModel @Inject constructor(
 	val collection: Flow<PagingData<PhotoResource>> =
 		repository.collectionMedia.cachedIn(viewModelScope)
 
-	private var _collectionLoadJob: Job? = null
-
 	init {
 		savedStateHandle.getStateFlow<PhotoCollectionParcelable?>(
 			key = "collection",
@@ -36,11 +33,9 @@ class CollectionMediaViewModel @Inject constructor(
 		}.launchIn(viewModelScope)
 	}
 
-	private fun loadCollectionFromId(collectionId: String) {
-		_collectionLoadJob?.cancel()
-		_collectionLoadJob = viewModelScope.launch {
-			repository.loadCollection(id = collectionId)
-		}
+	private fun loadCollectionFromId(collectionId: String) = viewModelScope.launch {
+		repository.loadCollection(id = collectionId)
 	}
+
 
 }

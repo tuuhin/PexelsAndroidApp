@@ -49,6 +49,11 @@ class DownloadOptionsBottomSheet : BottomSheetDialogFragment() {
 		_onOptionSelect = callback
 	}
 
+	override fun onDestroyView() {
+		super.onDestroyView()
+		_binding = null
+	}
+
 	companion object {
 		const val TAG = "DOWNLOAD_OPTION_BOTTOM_SHEET"
 	}

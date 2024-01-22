@@ -5,7 +5,8 @@
   <item
     android:id="@+id/information"
     android:icon="@drawable/ic_information"
-    android:title="Information"
+    android:iconTint="?attr/colorOnSurface"
+    android:title="@string/info_menu_option_title"
     app:showAsAction="always" />
 
 </menu>

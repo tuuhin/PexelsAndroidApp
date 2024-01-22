@@ -31,11 +31,9 @@ class CollectionMediaFragment : Fragment() {
 
 	private val navArgs by navArgs<CollectionMediaFragmentArgs>()
 
-
 	private val viewModel by viewModels<CollectionMediaViewModel>()
 
 	private var _binding: PhotoCollectionFragmentBinding? = null
-
 
 	private val binding: PhotoCollectionFragmentBinding
 		get() = _binding!!
@@ -48,7 +46,12 @@ class CollectionMediaFragment : Fragment() {
 		_binding = PhotoCollectionFragmentBinding.inflate(inflater, container, false)
 
 		// Set up title bar
-		setUpTitleBar()
+		binding.collectionTitleBar.title = navArgs.collection.title
+
+		binding.collectionTitleBar.setNavigationOnClickListener {
+			requireActivity().onNavigateUp()
+		}
+
 		// Set up the recycle view collection
 		setUpCollectionMediaRecycleView()
 
@@ -78,18 +81,6 @@ class CollectionMediaFragment : Fragment() {
 		_binding = null
 	}
 
-	private fun setUpTitleBar() {
-
-		binding.collectionTitleBar.title = navArgs.collection.title
-		navArgs.collection.desc?.let { desc ->
-			binding.collectionTitleBar.subtitle = desc
-		}
-
-		binding.collectionTitleBar.setNavigationOnClickListener {
-			requireActivity().onNavigateUp()
-		}
-	}
-
 	private fun setUpCollectionMediaRecycleView(context: Context = requireContext()) {
 
 		val layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
@@ -106,7 +97,7 @@ class CollectionMediaFragment : Fragment() {
 				.build()
 
 			val destination = CollectionMediaFragmentDirections
-				.actionCollectionFragmentToPhotoDetailsFragment(photoRes = photo.toParcelable())
+				.actionCollectionFragmentToPhotoDetailsFragment(photo = photo.toParcelable())
 
 			navController.navigate(directions = destination, navigatorExtras = extras)
 		}

@@ -7,5 +7,4 @@ import kotlinx.parcelize.Parcelize
 data class PhotoCollectionParcelable(
 	val collectionId: String,
 	val title: String,
-	val desc: String? = null
 ) : Parcelable

@@ -58,4 +58,12 @@
   <string name="retry_text">Retry</string>
   <string name="loading_text">Loading…</string>
   <string name="failed_to_load_collection">Failed To Load Collection</string>
+  <string name="loading_content_text">Preparing your content</string>
+  <string name="failed_to_load_photo">Failed to Load Photo</string>
+  <string name="photo_info_dimensions">Dimensions</string>
+  <string name="photo_info_photo_taken_by">Photo taken By</string>
+  <string name="place_holder_color">PlaceHolder color</string>
+  <string name="photo_details_text">Photo Details</string>
+  <string name="photo_dimensions">%d x %d</string>
+  <string name="dismiss_button">Dismiss</string>
 </resources>

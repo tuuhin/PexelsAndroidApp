@@ -80,7 +80,7 @@ interface PexelsApi {
 	@GET("/v1/photos/{id}")
 	suspend fun getPhotoFromId(
 		@Path("id") id: Int
-	): PhotoResourceDto?
+	): PhotoResourceDto
 
 
 	companion object {

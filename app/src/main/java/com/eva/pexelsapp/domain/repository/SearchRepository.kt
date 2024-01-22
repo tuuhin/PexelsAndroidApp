@@ -15,8 +15,8 @@ interface SearchRepository {
 
 	suspend fun searchPhoto(query: String)
 
-	suspend fun setSearchFiltersOrientation(option: OrientationOptions?)
+	suspend fun setSearchFiltersOrientation(option: OrientationOptions? = null)
 
-	suspend fun setSearchFilterSize(option: SizeOptions?)
+	suspend fun setSearchFilterSize(option: SizeOptions? = null)
 
 }

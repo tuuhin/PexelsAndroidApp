@@ -149,7 +149,7 @@ class HomeFragment : Fragment() {
 				.build()
 
 			val destination = HomeFragmentDirections
-				.actionHomeFragmentToPhotoDetailsFragment(photoRes = photo.toParcelable())
+				.actionHomeFragmentToPhotoDetailsFragment(photo = photo.toParcelable())
 
 			navController.navigate(directions = destination, navigatorExtras = extras)
 		}
@@ -223,7 +223,7 @@ class HomeFragment : Fragment() {
 				.build()
 
 			val destination = HomeFragmentDirections
-				.actionHomeFragmentToPhotoDetailsFragment(photoRes = photo.toParcelable())
+				.actionHomeFragmentToPhotoDetailsFragment(photo = photo.toParcelable())
 
 			navController.navigate(directions = destination, navigatorExtras = extras)
 		}
