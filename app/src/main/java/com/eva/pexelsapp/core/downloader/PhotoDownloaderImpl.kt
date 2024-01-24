@@ -14,7 +14,6 @@ class PhotoDownloaderImpl(
 	private val downLoadManager by lazy { context.getSystemService<DownloadManager>() }
 
 	override fun downloadAsDownload(url: String, title: String?, desc: String?): Long {
-
 		val uri = url.toUri()
 		val request = DownloadManager.Request(uri)
 			.setMimeType("images/*")
@@ -23,8 +22,11 @@ class PhotoDownloaderImpl(
 			.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
 			.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, url)
 
-
 		return downLoadManager?.enqueue(request) ?: -1L
+	}
+
+	override fun cancelDownload(id: Long) {
+		downLoadManager?.remove(id)
 	}
 
 }

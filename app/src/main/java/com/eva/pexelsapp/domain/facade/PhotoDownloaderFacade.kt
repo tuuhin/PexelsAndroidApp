@@ -8,4 +8,6 @@ interface PhotoDownloaderFacade {
 		desc: String? = null
 	): Long
 
+	fun cancelDownload(id: Long)
+
 }

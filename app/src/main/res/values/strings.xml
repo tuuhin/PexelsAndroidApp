@@ -59,11 +59,22 @@
   <string name="loading_text">Loading…</string>
   <string name="failed_to_load_collection">Failed To Load Collection</string>
   <string name="loading_content_text">Preparing your content</string>
-  <string name="failed_to_load_photo">Failed to Load Photo</string>
+  <string name="photo_details_error_title">Some Error Occurred</string>
   <string name="photo_info_dimensions">Dimensions</string>
   <string name="photo_info_photo_taken_by">Photo taken By</string>
   <string name="place_holder_color">PlaceHolder color</string>
   <string name="photo_details_text">Photo Details</string>
   <string name="photo_dimensions">%d x %d</string>
   <string name="dismiss_button">Dismiss</string>
+  <string name="wallpaper_option_home_screen">Home Screen</string>
+  <string name="wallpaper_option_lock_screen">Lock Screen</string>
+  <string name="wallpaper_option_home_and_lock">Home And Lock Screens</string>
+  <string name="wallpaper_sheet_heading">Apply Wallpaper</string>
+  <string name="wallpaper_sheet_text">You can apply wallpaper to particular screens or apply wallpaper to both screens even with other third part installed application</string>
+  <string name="wallpaper_option_other_third_party_app">Other Third Party App</string>
+  <string name="set_wallpaper_via_other_title">Set Wallpaper via other apps</string>
+  <string name="download_option_title">Download Options</string>
+  <string name="download_option_text">You can download the images of these specific size configurations</string>
+  <string name="search_filters_text">Search Filters to be applied to the search. Search preferences are saved for future searches</string>
+  <string name="share_image_intent_chooser_title">Share Image Url</string>
 </resources>

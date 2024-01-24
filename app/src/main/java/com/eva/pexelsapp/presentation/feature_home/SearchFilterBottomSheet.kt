@@ -1,21 +1,22 @@
 package com.eva.pexelsapp.presentation.feature_home
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.eva.pexelsapp.R
 import com.eva.pexelsapp.databinding.SearchFiltersSheetBinding
 import com.eva.pexelsapp.domain.enums.OrientationOptions
 import com.eva.pexelsapp.domain.enums.SizeOptions
 import com.eva.pexelsapp.domain.models.SearchFilters
+import com.eva.pexelsapp.presentation.util.extensions.launchAndRepeatOnLifeCycle
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.launch
 
 class SearchFilterBottomSheet(
 	private val filtersFlow: Flow<SearchFilters> = emptyFlow()
@@ -65,6 +66,16 @@ class SearchFilterBottomSheet(
 		return binding.root
 	}
 
+	override fun getDialog(): Dialog? {
+		val dialog = super.getDialog() as? BottomSheetDialog
+
+		return dialog?.apply {
+			behavior.isHideable = true
+			behavior.isFitToContents = true
+			behavior.saveFlags = BottomSheetBehavior.SAVE_NONE
+		}
+	}
+
 
 	override fun onDestroyView() {
 		_binding = null
@@ -80,8 +91,8 @@ class SearchFilterBottomSheet(
 		_onSizeOptionChange = listener
 	}
 
-	private fun setFilters() = lifecycleScope.launch {
-		viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+	private fun setFilters() {
+		viewLifecycleOwner.launchAndRepeatOnLifeCycle(Lifecycle.State.STARTED) {
 			filtersFlow.collect { (orientation, size) ->
 				val orientationId = when (orientation) {
 					OrientationOptions.LANDSCAPE -> R.id.orientation_option_landscape
@@ -102,6 +113,7 @@ class SearchFilterBottomSheet(
 			}
 		}
 	}
+
 
 	companion object {
 		const val TAG = "SEARCH_FILTER_BOTTOM_SHEET_TAG"

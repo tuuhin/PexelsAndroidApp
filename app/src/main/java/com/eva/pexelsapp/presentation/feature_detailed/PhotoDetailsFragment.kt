@@ -1,5 +1,6 @@
 package com.eva.pexelsapp.presentation.feature_detailed
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -13,20 +14,22 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import coil.dispose
 import coil.imageLoader
 import coil.request.ImageRequest
 import com.eva.pexelsapp.R
+import com.eva.pexelsapp.core.workers.DownloadImageWorker
 import com.eva.pexelsapp.databinding.PhotoDetailedFragmentBinding
 import com.eva.pexelsapp.databinding.PhotoDetailsDailogLayoutBinding
 import com.eva.pexelsapp.domain.models.PhotoResource
 import com.eva.pexelsapp.presentation.util.extensions.launchAndRepeatOnLifeCycle
 import com.eva.pexelsapp.utils.UiEvent
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered as CenteredDialogTheme
 
 @AndroidEntryPoint
@@ -83,6 +86,8 @@ class PhotoDetailsFragment : Fragment() {
 		setDownloadButton()
 		//setup revised content
 		setUpRevisedContent()
+		//setWallpaper
+		setWallpaperButton()
 
 		return binding.root
 	}
@@ -133,21 +138,26 @@ class PhotoDetailsFragment : Fragment() {
 		}
 	}
 
-	private fun showErrorDialog(message: String) {
+	private fun showErrorDialog(message: String, onRetry: (() -> Unit)? = null) {
 		val context = requireContext()
 
-		val errorDialog = MaterialAlertDialogBuilder(context, CenteredDialogTheme)
-			.setTitle(R.string.failed_to_load_photo)
+		val alertDialog = MaterialAlertDialogBuilder(context, CenteredDialogTheme)
+			.setTitle(R.string.photo_details_error_title)
 			.setMessage(message)
-			.setPositiveButton(R.string.retry_text) { dialog, _ ->
-				viewModel.retryLoading()
+			.setNegativeButton(R.string.dismiss_button) { dialog, _ ->
 				dialog.dismiss()
-			}.setNegativeButton(R.string.dismiss_button) { dialog, _ ->
-				dialog.dismiss()
+			}
+			.apply {
+				onRetry?.let { func ->
+					setPositiveButton(R.string.retry_text) { dialog, _ ->
+						func()
+						dialog.dismiss()
+					}
+				}
 			}
 			.create()
 
-		errorDialog.show()
+		alertDialog.show()
 	}
 
 	private fun setUpRevisedContent() {
@@ -155,19 +165,19 @@ class PhotoDetailsFragment : Fragment() {
 		val context = requireContext()
 
 		viewLifecycleOwner.launchAndRepeatOnLifeCycle(Lifecycle.State.STARTED) {
-			viewModel.loadedContent.collect { resourceContent ->
-				resourceContent?.let {
+			viewModel.loadedContent.collect { content ->
+				content?.let {
 					// Title
-					binding.topAppBar.title = resourceContent.alt
+					binding.topAppBar.title = content.alt
 
 					// Image
 					val request = ImageRequest.Builder(context)
-						.data(resourceContent.sources.portrait)
+						.data(content.sources.portrait)
 						.target(binding.image)
 						.build()
 					context.imageLoader.enqueue(request)
 
-					setUpMenuCallback(resourceContent)
+					setUpMenuCallback(photo = content)
 				}
 			}
 		}
@@ -182,7 +192,20 @@ class PhotoDetailsFragment : Fragment() {
 		viewLifecycleOwner.launchAndRepeatOnLifeCycle(Lifecycle.State.STARTED) {
 			viewModel.uiEvent.collect { event ->
 				when (event) {
-					is UiEvent.ShowDialog -> showErrorDialog(message = event.content)
+					is UiEvent.ShowDialog -> showErrorDialog(
+						message = event.content,
+						onRetry = event.onRetry
+					)
+
+					is UiEvent.ShowSnackBar -> {
+						val snackBar = Snackbar.make(
+							context,
+							binding.scaffold,
+							event.message,
+							Snackbar.LENGTH_SHORT
+						)
+						snackBar.show()
+					}
 				}
 			}
 		}
@@ -191,7 +214,6 @@ class PhotoDetailsFragment : Fragment() {
 	private fun setContentImage() {
 
 		val photoResource = navArgs.photo
-
 
 		val color = Color.parseColor(photoResource.placeHolderColor)
 		binding.image.setBackgroundColor(color)
@@ -202,32 +224,64 @@ class PhotoDetailsFragment : Fragment() {
 		val context = requireContext()
 		val photoRes = navArgs.photo
 
+		val shareImageTitle = context.getString(R.string.share_image_intent_chooser_title)
+
 		val intent = Intent(Intent.ACTION_SEND).apply {
 			type = "text/plain"
 			putExtra(Intent.EXTRA_TEXT, photoRes.photoUrl)
 		}
-		val shareIntent = Intent.createChooser(intent, null)
+		val shareIntent = Intent.createChooser(intent, shareImageTitle)
 
 		binding.photoActions.shareButton.setOnClickListener {
-			context.startActivity(shareIntent)
+			try {
+				context.startActivity(shareIntent)
+			} catch (e: ActivityNotFoundException) {
+				e.printStackTrace()
+			}
 		}
 	}
 
 	private fun setDownloadButton() {
 
-		val optionsBottomSheet = DownloadOptionsBottomSheet().apply sheet@{
-			(this@sheet.dialog as? BottomSheetDialog)?.apply {
-				behavior.isHideable = true
-				behavior.isFitToContents = true
-				behavior.saveFlags = BottomSheetBehavior.SAVE_NONE
-			}
+		val optionsBottomSheet = DownloadOptionsBottomSheet()
+		optionsBottomSheet.onOptionSelect { option ->
+			viewModel.onDownloadOptionSelected(option)
+			optionsBottomSheet.dismiss()
 		}
-		optionsBottomSheet.onOptionSelect(viewModel::onDownloadOptionSelected)
 
 		binding.photoActions.downloadPictureButton.setOnClickListener {
 			optionsBottomSheet.show(parentFragmentManager, DownloadOptionsBottomSheet.TAG)
 		}
 
+	}
+
+	private fun setWallpaperButton() {
+		val context = requireContext()
+
+		val optionSheet = WallpaperOptionsBottomSheet()
+
+		optionSheet.onOptionSelect { mode ->
+
+			viewModel.setWallpaperMode(mode)
+
+			val photo = viewModel.currentContent ?: return@onOptionSelect
+
+			val workerId = DownloadImageWorker.downloadCacheImage(context, photo)
+
+			lifecycleScope.launch {
+				DownloadImageWorker.observeWorkerState(
+					context = context,
+					workerId = workerId,
+					onUriReceived = viewModel::onObserveDownloadImageWorker
+				)
+			}
+			// dismiss as the worker is initialized
+			optionSheet.dismiss()
+		}
+
+		binding.photoActions.setWallpaperButton.setOnClickListener {
+			optionSheet.show(parentFragmentManager, WallpaperOptionsBottomSheet.TAG)
+		}
 	}
 
 }

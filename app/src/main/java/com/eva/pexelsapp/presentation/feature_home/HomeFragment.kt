@@ -10,8 +10,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
@@ -25,14 +23,12 @@ import com.eva.pexelsapp.presentation.feature_home.adapters.CollectionPhotoAdapt
 import com.eva.pexelsapp.presentation.feature_home.adapters.CommonFooterAdapter
 import com.eva.pexelsapp.presentation.feature_home.adapters.CuratedPhotoAdapter
 import com.eva.pexelsapp.presentation.feature_home.adapters.SearchResultsAdapter
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.eva.pexelsapp.presentation.util.extensions.launchAndRepeatOnLifeCycle
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
 import com.google.android.material.carousel.MultiBrowseCarouselStrategy
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -78,14 +74,7 @@ class HomeFragment : Fragment() {
 	}
 
 	private fun setUpSearchFilters() {
-		val bottomSheet = SearchFilterBottomSheet(filtersFlow = viewModel.searchFilters).apply {
-			(dialog as? BottomSheetDialog)
-				?.apply {
-					behavior.isHideable = true
-					behavior.isFitToContents = true
-					behavior.saveFlags = BottomSheetBehavior.SAVE_NONE
-				}
-		}
+		val bottomSheet = SearchFilterBottomSheet(filtersFlow = viewModel.searchFilters)
 
 		bottomSheet.onOrientationChangeListener(viewModel::setSearchFilterOrientation)
 
@@ -126,10 +115,8 @@ class HomeFragment : Fragment() {
 			this@apply.layoutManager = layoutManager
 		}
 
-		lifecycleScope.launch {
-			viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-				viewModel.photoCollections.collect(collectionAdapter::submitData)
-			}
+		viewLifecycleOwner.launchAndRepeatOnLifeCycle(Lifecycle.State.STARTED) {
+			viewModel.photoCollections.collect(collectionAdapter::submitData)
 		}
 	}
 
@@ -169,41 +156,36 @@ class HomeFragment : Fragment() {
 			this.layoutManager = layoutManager
 		}
 
-		lifecycleScope.launch {
-			viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-				viewModel.searchResults.collect(searchResultsAdapter::submitData)
-			}
+		viewLifecycleOwner.launchAndRepeatOnLifeCycle(Lifecycle.State.STARTED) {
+			viewModel.searchResults.collect(searchResultsAdapter::submitData)
 		}
 
-		lifecycleScope.launch {
-			viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-				searchResultsAdapter.loadStateFlow.collect { state ->
+		viewLifecycleOwner.launchAndRepeatOnLifeCycle(Lifecycle.State.STARTED) {
+			searchResultsAdapter.loadStateFlow.collect { state ->
 
-					(state.refresh as? LoadState.Error)?.let { errorState ->
-						val errorMessage = errorState.error.localizedMessage
-							?: context.getString(R.string.unknown_error_message)
+				(state.refresh as? LoadState.Error)?.let { errorState ->
+					val errorMessage = errorState.error.localizedMessage
+						?: context.getString(R.string.unknown_error_message)
 
-						val dialog = MaterialAlertDialogBuilder(context)
-							.setTitle(R.string.search_error_title)
-							.setMessage(errorMessage)
-							.setNegativeButton(R.string.close_dialog_text) { dialog, _ ->
-								dialog.dismiss()
-							}
-							.create()
+					val dialog = MaterialAlertDialogBuilder(context)
+						.setTitle(R.string.search_error_title)
+						.setMessage(errorMessage)
+						.setNegativeButton(R.string.close_dialog_text) { dialog, _ ->
+							dialog.dismiss()
+						}
+						.create()
 
-						dialog.show()
-					}
-
-					binding.searchProgressIndicator.root.isVisible =
-						state.refresh is LoadState.Loading
-
-					binding.searchResults.isVisible =
-						state.refresh is LoadState.NotLoading
-
+					dialog.show()
 				}
+
+				binding.searchProgressIndicator.root.isVisible =
+					state.refresh is LoadState.Loading
+
+				binding.searchResults.isVisible =
+					state.refresh is LoadState.NotLoading
+
 			}
 		}
-
 	}
 
 	private fun setUpCuratedPhotos() {
@@ -238,10 +220,8 @@ class HomeFragment : Fragment() {
 			this.layoutManager = layoutManager
 		}
 
-		lifecycleScope.launch {
-			viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-				viewModel.curatedPhotos.collect(curatedPhotoAdapter::submitData)
-			}
+		viewLifecycleOwner.launchAndRepeatOnLifeCycle(Lifecycle.State.STARTED) {
+			viewModel.curatedPhotos.collect(curatedPhotoAdapter::submitData)
 		}
 
 	}

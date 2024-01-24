@@ -1,11 +1,14 @@
 package com.eva.pexelsapp.presentation.feature_detailed
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.eva.pexelsapp.databinding.DownloadOptionSheetBinding
 import com.eva.pexelsapp.domain.models.PhotoDownloadOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class DownloadOptionsBottomSheet : BottomSheetDialogFragment() {
@@ -44,6 +47,17 @@ class DownloadOptionsBottomSheet : BottomSheetDialogFragment() {
 
 		return binding.root
 	}
+
+	override fun getDialog(): Dialog? {
+		val dialog = super.getDialog() as? BottomSheetDialog
+
+		return dialog?.apply {
+			behavior.isHideable = true
+			behavior.isFitToContents = true
+			behavior.saveFlags = BottomSheetBehavior.SAVE_NONE
+		}
+	}
+
 
 	fun onOptionSelect(callback: (PhotoDownloadOptions) -> Unit) {
 		_onOptionSelect = callback

@@ -11,10 +11,19 @@
     android:layout_height="wrap_content" />
 
   <com.google.android.material.textview.MaterialTextView
-    style="@style/TextAppearance.Material3.TitleLarge"
+    style="@style/TextAppearance.Material3.HeadlineSmall"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spacer_spacing_4"
     android:text="@string/search_filter_title"
+    android:textAlignment="center" />
+
+  <com.google.android.material.textview.MaterialTextView
+    style="@style/TextAppearance.Material3.BodyMedium"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="@dimen/spacer_spacing_8"
+    android:text="@string/search_filters_text"
     android:textAlignment="center" />
 
   <Space
