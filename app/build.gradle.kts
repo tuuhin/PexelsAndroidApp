@@ -84,6 +84,8 @@ dependencies {
 	// dependency injection
 	implementation("com.google.dagger:hilt-android:2.50")
 	ksp("com.google.dagger:hilt-android-compiler:2.50")
+	//work manger
+	implementation("androidx.work:work-runtime-ktx:2.9.0")
 	//splash
 	implementation("androidx.core:core-splashscreen:1.0.1")
 	//datastore

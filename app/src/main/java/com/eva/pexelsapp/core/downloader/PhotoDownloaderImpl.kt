@@ -1,4 +1,4 @@
-package com.eva.pexelsapp.data.services
+package com.eva.pexelsapp.core.downloader
 
 import android.app.DownloadManager
 import android.content.Context
@@ -7,18 +7,22 @@ import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import com.eva.pexelsapp.domain.facade.PhotoDownloaderFacade
 
-class PhotoDownloaderImpl(private val context: Context) : PhotoDownloaderFacade {
+class PhotoDownloaderImpl(
+	private val context: Context
+) : PhotoDownloaderFacade {
 
 	private val downLoadManager by lazy { context.getSystemService<DownloadManager>() }
 
-	override fun downLoadUrl(url: String): Long {
+	override fun downloadAsDownload(url: String, title: String?, desc: String?): Long {
+
 		val uri = url.toUri()
 		val request = DownloadManager.Request(uri)
 			.setMimeType("images/*")
-			.setAllowedOverMetered(true)
-			.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
-			.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+			.setTitle(title ?: "Downloading...")
+			.setDescription(desc ?: "")
+			.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
 			.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, url)
+
 
 		return downLoadManager?.enqueue(request) ?: -1L
 	}
