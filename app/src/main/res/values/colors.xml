@@ -8,31 +8,38 @@
   <color name="onPrimary">#FFFFFF</color>
   <color name="primaryContainer">#D7E2FF</color>
   <color name="onPrimaryContainer">#001B3F</color>
+
   <color name="secondary">#006B5A</color>
   <color name="onSecondary">#FFFFFF</color>
   <color name="secondaryContainer">#7AF8DB</color>
   <color name="onSecondaryContainer">#00201A</color>
+
   <color name="tertiary">#6A5F00</color>
   <color name="onTertiary">#FFFFFF</color>
   <color name="tertiaryContainer">#F7E467</color>
   <color name="onTertiaryContainer">#201C00</color>
+
   <color name="error">#BA1A1A</color>
   <color name="errorContainer">#FFDAD6</color>
   <color name="onError">#FFFFFF</color>
   <color name="onErrorContainer">#410002</color>
+
   <color name="background">#FDFBFF</color>
   <color name="onBackground">#1A1B1F</color>
   <color name="surface">#FDFBFF</color>
   <color name="onSurface">#1A1B1F</color>
   <color name="surfaceVariant">#E0E2EC</color>
   <color name="onSurfaceVariant">#44474E</color>
+
   <color name="outline">#74777F</color>
+  <color name="outlineVariant">#C4C6D0</color>
+
   <color name="inverseOnSurface">#F2F0F4</color>
   <color name="inverseSurface">#2F3033</color>
   <color name="inversePrimary">#ABC7FF</color>
+
   <color name="shadow">#000000</color>
   <color name="surfaceTint">#005CBB</color>
-  <color name="outlineVariant">#C4C6D0</color>
   <color name="scrim">#000000</color>
 
 </resources>

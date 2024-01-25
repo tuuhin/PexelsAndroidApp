@@ -5,31 +5,38 @@
   <color name="onPrimary">#002F66</color>
   <color name="primaryContainer">#00458F</color>
   <color name="onPrimaryContainer">#D7E2FF</color>
+
   <color name="secondary">#5ADBBF</color>
   <color name="onSecondary">#00382E</color>
   <color name="secondaryContainer">#005143</color>
   <color name="onSecondaryContainer">#7AF8DB</color>
+
   <color name="tertiary">#DAC84E</color>
   <color name="onTertiary">#373100</color>
   <color name="tertiaryContainer">#504700</color>
   <color name="onTertiaryContainer">#F7E467</color>
+
   <color name="error">#FFB4AB</color>
   <color name="errorContainer">#93000A</color>
   <color name="onError">#690005</color>
   <color name="onErrorContainer">#FFDAD6</color>
+
   <color name="background">#1A1B1F</color>
   <color name="onBackground">#E3E2E6</color>
   <color name="surface">#1A1B1F</color>
   <color name="onSurface">#E3E2E6</color>
   <color name="surfaceVariant">#44474E</color>
   <color name="onSurfaceVariant">#C4C6D0</color>
+
   <color name="outline">#8E9099</color>
+  <color name="outlineVariant">#44474E</color>
+
   <color name="inverseOnSurface">#1A1B1F</color>
   <color name="inverseSurface">#E3E2E6</color>
   <color name="inversePrimary">#005CBB</color>
+
   <color name="shadow">#000000</color>
   <color name="surfaceTint">#ABC7FF</color>
-  <color name="outlineVariant">#44474E</color>
   <color name="scrim">#000000</color>
 
 </resources>
