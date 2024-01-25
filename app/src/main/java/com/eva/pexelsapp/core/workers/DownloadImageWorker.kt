@@ -1,6 +1,8 @@
 package com.eva.pexelsapp.core.workers
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
@@ -17,6 +19,7 @@ import com.eva.pexelsapp.domain.models.PhotoResource
 import com.eva.pexelsapp.presentation.util.extensions.toContentUri
 import com.eva.pexelsapp.utils.Resource
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.File
@@ -44,26 +47,26 @@ class DownloadImageWorker(
 			workDataOf(WorkParameters.ERROR_KEY to WorkParameters.IMAGE_ID_NOT_FOUND)
 		)
 
-		val imageName = "$imageId-cache-image-portrait.jpg"
+		val imageName = "cache-image-$imageId.png"
 
-		val fileFilter = FileFilter { file -> file.path.endsWith("$imageId-cache-image.jpg") }
+		val fileFilter = FileFilter { file -> file.isFile && file.path.endsWith("$imageId.png") }
 
 		return withContext(Dispatchers.IO) {
 			try {
+
 				val directory = File(context.cacheDir, "cached_images")
 					.apply(File::mkdirs)
 
 				directory.listFiles(fileFilter)
 					?.firstOrNull()
 					?.let { file ->
-						if (!file.exists()) return@let
-
-						Log.d(WORKER_TAG, "FOUND_IN_CACHE")
-						val fileUri = file.toContentUri(context)
-						return@withContext Result.success(
-							workDataOf(WorkParameters.SUCCESS_KEY to fileUri.toString())
-						)
-
+						if (file.exists()) {
+							Log.d(WORKER_TAG, "FOUND_IN_CACHE")
+							val fileUri = file.toContentUri(context)
+							return@withContext Result.success(
+								workDataOf(WorkParameters.SUCCESS_KEY to fileUri.toString())
+							)
+						}
 					}
 
 				Log.d(WORKER_TAG, "NOT_FOUND_IN_CACHE")
@@ -72,14 +75,16 @@ class DownloadImageWorker(
 
 				response.body()?.let { body ->
 
-					val responseBytes = body.bytes()
+					val bytes = body.bytes()
 					val file = File(directory, imageName)
 
-					FileOutputStream(file).use {
-						it.write(responseBytes)
-					}
-					val fileUri = file.toContentUri(context)
+					val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
 
+					FileOutputStream(file).use { outputStream ->
+						bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+					}
+
+					val fileUri = file.toContentUri(context)
 					Result.success(
 						workDataOf(WorkParameters.SUCCESS_KEY to fileUri.toString())
 					)
@@ -88,6 +93,7 @@ class DownloadImageWorker(
 					workDataOf(WorkParameters.ERROR_KEY to "NO BODY RESPONSE FOUND")
 				)
 			} catch (e: HttpException) {
+				e.printStackTrace()
 				val serverError = e.code() in 500..599
 				// retry if there is a server error
 				if (serverError) Result.retry()
@@ -150,20 +156,30 @@ class DownloadImageWorker(
 		suspend fun observeWorkerState(
 			context: Context,
 			workerId: UUID,
-			onUriReceived: suspend (Resource<String>) -> Unit
+			onUriReceived: suspend (Resource<String>) -> Unit,
 		) = WorkManager.getInstance(context)
 			.getWorkInfoByIdFlow(workerId)
+			.cancellable()
 			.collect { workInfo ->
+				if (workInfo == null) return@collect
 				Log.d(WORKER_TAG, "WORKER_STATE-> ${workInfo.state}")
 				Log.d(WORKER_TAG, "WORKER_DATA -> ${workInfo.outputData}")
+
+				val successData = workInfo.outputData.getString(WorkParameters.SUCCESS_KEY)
+				val failedData = workInfo.outputData.getString(WorkParameters.ERROR_KEY)
+
 				when (workInfo.state) {
-					WorkInfo.State.SUCCEEDED -> workInfo.outputData.getString(WorkParameters.SUCCESS_KEY)
-						?.let { onUriReceived(Resource.Success(data = it)) }
+					WorkInfo.State.SUCCEEDED -> successData?.let {
+						onUriReceived(Resource.Success(data = it))
+					}
 
-					WorkInfo.State.FAILED -> workInfo.outputData.getString(WorkParameters.ERROR_KEY)
-						?.let { onUriReceived(Resource.Error(message = it)) }
+					WorkInfo.State.FAILED -> failedData?.let {
+						onUriReceived(Resource.Error(message = it))
+					}
 
-					else -> onUriReceived(Resource.Loading)
+					WorkInfo.State.RUNNING -> onUriReceived(Resource.Loading)
+
+					else -> {}
 				}
 			}
 	}

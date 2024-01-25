@@ -1,8 +1,10 @@
 package com.eva.pexelsapp.presentation.feature_detailed
 
+import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.eva.pexelsapp.core.workers.DownloadImageWorker
 import com.eva.pexelsapp.data.parcelable.PhotoResourceParcelable
 import com.eva.pexelsapp.domain.enums.WallpaperMode
 import com.eva.pexelsapp.domain.models.PhotoDownloadOptions
@@ -11,6 +13,7 @@ import com.eva.pexelsapp.domain.repository.PhotoDetailsRepository
 import com.eva.pexelsapp.utils.Resource
 import com.eva.pexelsapp.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -19,6 +22,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,13 +37,16 @@ class PhotoDetailsViewModel @Inject constructor(
 	private val _isContentLoading = MutableStateFlow(true)
 	val isContentLoading = _isContentLoading.asStateFlow()
 
-	private val _wallpaperMode = MutableStateFlow(WallpaperMode.HOME_AND_LOCK_SCREEN)
-
 	private val _uiEvent = MutableSharedFlow<UiEvent>()
 	val uiEvent = _uiEvent.asSharedFlow()
 
-	val currentContent: PhotoResource?
-		get() = _revisedContent.value
+	private val _isWorkerDoingWork = MutableStateFlow(false)
+	val isWorkerRunning = _isWorkerDoingWork.asStateFlow()
+
+	private val _contentUriAsString = MutableStateFlow<String?>(null)
+
+	private var _workerListener: Job? = null
+	private var _workerId: UUID? = null
 
 	init {
 		savedStateHandle.getStateFlow<PhotoResourceParcelable?>(key = "photo", initialValue = null)
@@ -76,30 +83,62 @@ class PhotoDetailsViewModel @Inject constructor(
 	}
 
 	fun onDownloadOptionSelected(option: PhotoDownloadOptions) {
-		val image = _revisedContent.value?.sources ?: return
+		val content = _revisedContent.value ?: return
+		val image = content.sources
 		val url = when (option) {
 			PhotoDownloadOptions.PORTRAIT -> image.portrait
 			PhotoDownloadOptions.LANDSCAPE -> image.landScape
 			PhotoDownloadOptions.MEDIUM -> image.medium
 			PhotoDownloadOptions.LARGE -> image.original
 		}
-		repository.downloadImage(url)
+		repository.downloadImage(url, imageId = "${content.id}")
 	}
 
-	fun setWallpaperMode(mode: WallpaperMode) = _wallpaperMode.update { mode }
-
-	fun onObserveDownloadImageWorker(resource: Resource<String>) {
-		viewModelScope.launch {
-			when (resource) {
-				is Resource.Error -> _uiEvent.emit(UiEvent.ShowDialog(resource.message))
-				Resource.Loading -> _uiEvent.emit(UiEvent.ShowSnackBar("Preparing Image..."))
-				is Resource.Success -> setWallpaperActual(resource.data)
+	fun onSetWallpaperClicked(context: Context, mode: WallpaperMode) {
+		_contentUriAsString.value?.let { uriAsString ->
+			repository.setWallpaper(fileUri = uriAsString, mode = mode)
+		} ?: run {
+			startAndListenToWorker(context) { uriAsString ->
+				repository.setWallpaper(fileUri = uriAsString, mode = mode)
 			}
 		}
 	}
 
-	private fun setWallpaperActual(uriString: String) {
-		val currentMode = _wallpaperMode.value
-		repository.setWallpaper(fileUri = uriString, mode = currentMode)
+	private fun startAndListenToWorker(context: Context, onSuccess: (String) -> Unit) {
+		val photo = _revisedContent.value ?: return
+		// cancel worker listener job if present
+		_workerListener?.cancel()
+		// create the new job for the listener
+		_workerListener = viewModelScope.launch {
+			// If there is a worker I'd then cancel the worker
+			_workerId?.let { workId ->
+				DownloadImageWorker.cancelWorkerIfNotComplete(context = context, workId = workId)
+			}
+			// creates the new worker
+			_workerId = DownloadImageWorker.downloadCacheImage(context, photo)
+			// no need to observe if there is no workerId
+			val workId = _workerId ?: return@launch
+			// observe worker changes
+			DownloadImageWorker.observeWorkerState(
+				context = context,
+				workerId = workId,
+				onUriReceived = { resource ->
+					when (resource) {
+						is Resource.Error -> _uiEvent.emit(UiEvent.ShowDialog(resource.message))
+						Resource.Loading -> _uiEvent.emit(UiEvent.ShowSnackBar("Preparing Image..."))
+						is Resource.Success -> {
+							_contentUriAsString.update { resource.data }
+							onSuccess(resource.data)
+						}
+					}
+
+					when (resource) {
+						Resource.Loading -> _isWorkerDoingWork.update { true }
+						else -> _isWorkerDoingWork.update { false }
+					}
+				},
+			)
+		}
 	}
+
 }

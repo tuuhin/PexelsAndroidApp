@@ -4,8 +4,7 @@ interface PhotoDownloaderFacade {
 
 	fun downloadAsDownload(
 		url: String,
-		title: String? = null,
-		desc: String? = null
+		imageId: String? = null
 	): Long
 
 	fun cancelDownload(id: Long)

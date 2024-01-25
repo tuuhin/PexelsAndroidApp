@@ -151,7 +151,7 @@ class HomeFragment : Fragment() {
 			} else false
 		}
 
-		binding.searchResults.apply {
+		binding.searchContents.searchResults.apply {
 			this.adapter = searchResultsAdapter
 			this.layoutManager = layoutManager
 		}
@@ -178,10 +178,12 @@ class HomeFragment : Fragment() {
 					dialog.show()
 				}
 
-				binding.searchProgressIndicator.root.isVisible =
-					state.refresh is LoadState.Loading
+				val searchContents = binding.searchContents
 
-				binding.searchResults.isVisible =
+				searchContents.searchPlaceholder.isVisible =
+					state.append.endOfPaginationReached && state.refresh is LoadState.Loading
+
+				searchContents.searchResults.isVisible =
 					state.refresh is LoadState.NotLoading
 
 			}

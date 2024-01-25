@@ -14,13 +14,11 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import coil.dispose
 import coil.imageLoader
 import coil.request.ImageRequest
 import com.eva.pexelsapp.R
-import com.eva.pexelsapp.core.workers.DownloadImageWorker
 import com.eva.pexelsapp.databinding.PhotoDetailedFragmentBinding
 import com.eva.pexelsapp.databinding.PhotoDetailsDailogLayoutBinding
 import com.eva.pexelsapp.domain.models.PhotoResource
@@ -29,7 +27,6 @@ import com.eva.pexelsapp.utils.UiEvent
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import com.google.android.material.R.style.ThemeOverlay_Material3_MaterialAlertDialog_Centered as CenteredDialogTheme
 
 @AndroidEntryPoint
@@ -43,7 +40,6 @@ class PhotoDetailsFragment : Fragment() {
 
 	private val binding: PhotoDetailedFragmentBinding
 		get() = _binding!!
-
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
@@ -252,7 +248,6 @@ class PhotoDetailsFragment : Fragment() {
 		binding.photoActions.downloadPictureButton.setOnClickListener {
 			optionsBottomSheet.show(parentFragmentManager, DownloadOptionsBottomSheet.TAG)
 		}
-
 	}
 
 	private fun setWallpaperButton() {
@@ -261,22 +256,14 @@ class PhotoDetailsFragment : Fragment() {
 		val optionSheet = WallpaperOptionsBottomSheet()
 
 		optionSheet.onOptionSelect { mode ->
-
-			viewModel.setWallpaperMode(mode)
-
-			val photo = viewModel.currentContent ?: return@onOptionSelect
-
-			val workerId = DownloadImageWorker.downloadCacheImage(context, photo)
-
-			lifecycleScope.launch {
-				DownloadImageWorker.observeWorkerState(
-					context = context,
-					workerId = workerId,
-					onUriReceived = viewModel::onObserveDownloadImageWorker
-				)
-			}
-			// dismiss as the worker is initialized
+			viewModel.onSetWallpaperClicked(context, mode)
 			optionSheet.dismiss()
+		}
+
+		viewLifecycleOwner.launchAndRepeatOnLifeCycle(Lifecycle.State.STARTED) {
+			viewModel.isWorkerRunning.collect {
+				binding.photoActions.setWallpaperButton.isEnabled = !it
+			}
 		}
 
 		binding.photoActions.setWallpaperButton.setOnClickListener {

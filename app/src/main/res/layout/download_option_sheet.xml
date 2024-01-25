@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:layout_marginHorizontal="@dimen/scaffold_horizontal_padding"
-  android:orientation="vertical">
+  android:orientation="vertical"
+  android:paddingHorizontal="@dimen/scaffold_horizontal_padding">
 
   <com.google.android.material.bottomsheet.BottomSheetDragHandleView
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />
+
+  <com.google.android.material.textview.MaterialTextView
+    style="@style/TextAppearance.Material3.HeadlineSmall"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spacer_spacing_4"
+    android:text="@string/download_option_title"
+    android:textAlignment="center" />
+
+
+  <com.google.android.material.textview.MaterialTextView
+    style="@style/TextAppearance.Material3.BodyMedium"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="@dimen/spacer_spacing_8"
+    android:text="@string/download_option_text"
+    android:textAlignment="center" />
+
 
   <Button
     android:id="@+id/option_portrait"

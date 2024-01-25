@@ -1,11 +1,11 @@
 package com.eva.pexelsapp.core.wallpaper
 
 import android.app.WallpaperManager
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.widget.Toast
 import androidx.core.content.getSystemService
 import com.eva.pexelsapp.R
 import com.eva.pexelsapp.domain.enums.WallpaperMode
@@ -15,7 +15,8 @@ class WallpaperUtilImpl(
 	private val context: Context
 ) : WallpaperUtilFacade {
 
-	private val wallpaperManager: WallpaperManager? by lazy { context.getSystemService() }
+	private val wallpaperManager by lazy { context.getSystemService<WallpaperManager>() }
+
 
 	override fun setWallpaper(imageUri: String, mode: WallpaperMode) {
 		val file = Uri.parse(imageUri)
@@ -42,6 +43,10 @@ class WallpaperUtilImpl(
 				/* allowBackup = */true,
 				/* which = */wallpaperScreen
 			)
+
+			val toastText = context.getString(R.string.wallpaper_applied_text)
+
+			Toast.makeText(context, toastText, Toast.LENGTH_LONG).show()
 		}
 	}
 
@@ -60,12 +65,6 @@ class WallpaperUtilImpl(
 		val chooser = Intent.createChooser(intent, intentChooserTitle).apply {
 			flags = Intent.FLAG_ACTIVITY_NEW_TASK
 		}
-
-		try {
-			context.startActivity(chooser)
-		} catch (e: ActivityNotFoundException) {
-			e.printStackTrace()
-		}
-
+		context.startActivity(chooser)
 	}
 }

@@ -15,8 +15,8 @@ import javax.inject.Inject
 
 class PhotoDetailsRepoImpl @Inject constructor(
 	private val api: PexelsApi,
-	private val photoDownloader: PhotoDownloaderFacade,
-	private val wallpaperFacade: WallpaperUtilFacade
+	private val downloader: PhotoDownloaderFacade,
+	private val wallpaperUtil: WallpaperUtilFacade
 ) : PhotoDetailsRepository {
 
 	override suspend fun getPhotoFromId(id: Int): Resource<PhotoResource> {
@@ -32,9 +32,9 @@ class PhotoDetailsRepoImpl @Inject constructor(
 		}
 	}
 
-	override fun downloadImage(url: String) {
+	override fun downloadImage(url: String, imageId: String) {
 		try {
-			photoDownloader.downloadAsDownload(url)
+			downloader.downloadAsDownload(url = url, imageId = imageId)
 		} catch (e: Exception) {
 			e.printStackTrace()
 		}
@@ -43,8 +43,8 @@ class PhotoDetailsRepoImpl @Inject constructor(
 	override fun setWallpaper(fileUri: String, mode: WallpaperMode) {
 		try {
 			when (mode) {
-				WallpaperMode.VIA_OTHER_APP -> wallpaperFacade.setWallpaperViaOtherApps(fileUri)
-				else -> wallpaperFacade.setWallpaper(fileUri, mode)
+				WallpaperMode.VIA_OTHER_APP -> wallpaperUtil.setWallpaperViaOtherApps(fileUri)
+				else -> wallpaperUtil.setWallpaper(fileUri, mode)
 			}
 		} catch (e: Exception) {
 			e.printStackTrace()

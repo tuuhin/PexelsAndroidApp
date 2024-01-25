@@ -8,7 +8,7 @@ interface PhotoDetailsRepository {
 
 	suspend fun getPhotoFromId(id: Int): Resource<PhotoResource>
 
-	fun downloadImage(url: String)
+	fun downloadImage(url: String, imageId: String)
 
 	fun setWallpaper(fileUri: String, mode: WallpaperMode)
 

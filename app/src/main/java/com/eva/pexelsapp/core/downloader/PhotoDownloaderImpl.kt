@@ -13,12 +13,15 @@ class PhotoDownloaderImpl(
 
 	private val downLoadManager by lazy { context.getSystemService<DownloadManager>() }
 
-	override fun downloadAsDownload(url: String, title: String?, desc: String?): Long {
+	override fun downloadAsDownload(url: String, imageId: String?): Long {
 		val uri = url.toUri()
+
+		val title = "pexel-image-$imageId.jpeg"
+
 		val request = DownloadManager.Request(uri)
 			.setMimeType("images/*")
-			.setTitle(title ?: "Downloading...")
-			.setDescription(desc ?: "")
+			.setMimeType("image/jpeg")
+			.setTitle(title)
 			.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
 			.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, url)
 

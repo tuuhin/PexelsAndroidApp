@@ -51,7 +51,7 @@
   <string name="search_filter_size_option_small">Small</string>
   <string name="search_filter_size_option_all">All</string>
   <!--  Error Container Title-->
-  <string name="searching_text">Searching…</string>
+  <string name="no_search_results_text">No search results to show</string>
   <string name="search_error_title">Cannot Search</string>
   <string name="close_dialog_text">Close</string>
   <string name="unknown_error_message">Unknown Error Message</string>
@@ -77,4 +77,5 @@
   <string name="download_option_text">You can download the images of these specific size configurations</string>
   <string name="search_filters_text">Search Filters to be applied to the search. Search preferences are saved for future searches</string>
   <string name="share_image_intent_chooser_title">Share Image Url</string>
+  <string name="wallpaper_applied_text">New Wallpaper Applied</string>
 </resources>

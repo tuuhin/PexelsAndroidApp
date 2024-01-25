@@ -26,26 +26,11 @@
     app:animateMenuItems="true"
     app:layout_anchor="@id/search_bar">
 
-    <RelativeLayout
+    <include
+      android:id="@+id/search_contents"
+      layout="@layout/photo_search_results"
       android:layout_width="match_parent"
-      android:layout_height="match_parent">
-
-      <include
-        android:id="@+id/search_progress_indicator"
-        layout="@layout/search_loading_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true" />
-
-      <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/search_results"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:itemCount="10"
-        tools:listitem="@layout/search_results_layout" />
-
-    </RelativeLayout>
-
+      android:layout_height="match_parent" />
 
   </com.google.android.material.search.SearchView>
 

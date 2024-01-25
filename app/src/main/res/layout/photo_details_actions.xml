@@ -12,7 +12,6 @@
     android:layout_height="@dimen/photo_action_button_dimension"
     android:text="@string/set_wallpaper_text"
     android:textAppearance="?attr/textAppearanceBodyLarge"
-    android:textColor="?attr/colorOnPrimary"
     app:icon="@drawable/ic_wallpaper"
     app:iconGravity="textStart"
     app:iconPadding="@dimen/spacer_spacing_12"

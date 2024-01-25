@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <LinearLayout
+    android:id="@+id/search_placeholder"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:orientation="vertical"
+    android:padding="@dimen/spacer_spacing_12">
+
+    <com.google.android.material.textview.MaterialTextView
+      style="@style/TextAppearance.Material3.BodyLarge"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/spacer_spacing_8"
+      android:paddingTop="@dimen/spacer_spacing_4"
+      android:text="@string/no_search_results_text" />
+
+    <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:contentDescription="@string/no_search_results_text"
+      android:src="@drawable/ic_no_search"
+      app:tint="@color/onPrimaryContainer" />
+
+  </LinearLayout>
+
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/search_results"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:itemCount="10"
+    tools:listitem="@layout/search_results_layout" />
+
+</RelativeLayout>
